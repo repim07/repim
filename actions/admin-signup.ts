@@ -11,13 +11,12 @@ export async function adminSignupAction(
     const password = (formData.get('password') as string ?? '')
     const code     = (formData.get('code')     as string ?? '').trim()
 
-    // Validation basique
-    if (!nom || nom.length < 2)      return { error: 'Le nom doit contenir au moins 2 caractères.' }
-    if (!email)                       return { error: 'Email requis.' }
-    if (password.length < 8)          return { error: 'Le mot de passe doit contenir au moins 8 caractères.' }
-    if (!code)                        return { error: 'Le code d\'accès administrateur est requis.' }
+    if (!nom || nom.length < 2) return { error: 'Le nom doit contenir au moins 2 caractères.' }
+    if (!email)                  return { error: 'Email requis.' }
+    if (password.length < 8)     return { error: 'Le mot de passe doit contenir au moins 8 caractères.' }
+    if (!code)                   return { error: 'Le code d\'accès administrateur est requis.' }
 
-    // Vérification du code secret (défini dans les variables d'environnement Vercel)
+    // Vérification du code secret
     const adminCode = process.env.ADMIN_SIGNUP_CODE
     if (!adminCode) {
       return { error: 'Configuration manquante : ADMIN_SIGNUP_CODE non défini dans les variables d\'environnement.' }
@@ -26,13 +25,13 @@ export async function adminSignupAction(
       return { error: 'Code d\'accès incorrect.' }
     }
 
-    // Création du compte via le client admin (service_role)
     const admin = createAdminClient()
 
+    // Création du compte auth (email_confirm: true = pas de mail de vérification)
     const { data, error: authError } = await admin.auth.admin.createUser({
       email,
       password,
-      email_confirm: true, // pas besoin de vérifier l'email pour un admin
+      email_confirm: true,
       user_metadata: { nom, role: 'admin' },
     })
 
@@ -47,17 +46,23 @@ export async function adminSignupAction(
       return { error: 'La création du compte a échoué.' }
     }
 
-    // Mise à jour du profil — le trigger handle_new_user crée le profil,
-    // mais avec role='chercheur' par défaut. On force 'admin' ici.
-    await new Promise((r) => setTimeout(r, 500))
+    const userId = data.user.id
 
-    const { error: profileError } = await admin
+    // Laisser le trigger handle_new_user s'exécuter
+    await new Promise((r) => setTimeout(r, 800))
+
+    // UPSERT : crée le profil s'il n'existe pas, le met à jour sinon.
+    // Nécessaire car admin.auth.admin.createUser peut contourner le trigger.
+    const { error: upsertError } = await admin
       .from('profiles')
-      .update({ nom, role: 'admin' })
-      .eq('id', data.user.id)
+      .upsert(
+        { id: userId, email, nom, role: 'admin' },
+        { onConflict: 'id' }
+      )
 
-    if (profileError) {
-      console.error('[adminSignupAction] profile update error:', profileError.message)
+    if (upsertError) {
+      console.error('[adminSignupAction] profile upsert error:', upsertError.message)
+      // Non bloquant si le profil a déjà été créé par le trigger
     }
 
     return { ok: true }
