@@ -119,10 +119,10 @@ const STEPS = [
 ];
 
 const STATS = [
-  { value: "750 000+", label: "Utilisateurs actifs à Abidjan" },
-  { value: "2 500+",   label: "Agents & agences certifiés" },
-  { value: "1,5 M",    label: "Diaspora ivoirienne ciblée" },
-  { value: "150+",     label: "Promoteurs & investisseurs" },
+  { value: "100%",   label: "Annonces vérifiées par notre équipe" },
+  { value: "2 500+", label: "Agents & agences certifiés" },
+  { value: "1,5 M",  label: "Diaspora ivoirienne ciblée" },
+  { value: "150+",   label: "Promoteurs & investisseurs" },
 ];
 
 const TESTIMONIALS = [
@@ -402,7 +402,7 @@ function Hero() {
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-stone-500">
               <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-orange-500" />Annonces vérifiées</span>
-              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-orange-500" />0% arnaque</span>
+              <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-orange-500" />Mises en relation sécurisées</span>
               <span className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-orange-500" />Disponible sur Android / iOS / Web</span>
             </div>
 
@@ -445,8 +445,8 @@ function Hero() {
                   <CheckCircle className="w-5 h-5 text-orange-500" />
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400">Transactions sécurisées</p>
-                  <p className="text-sm font-bold text-stone-900">0% arnaque</p>
+                  <p className="text-xs text-stone-400">Signalement rapide</p>
+                  <p className="text-sm font-bold text-stone-900">Zéro tolérance arnaque</p>
                 </div>
               </div>
               <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-lg px-4 py-3 flex items-center gap-3">
