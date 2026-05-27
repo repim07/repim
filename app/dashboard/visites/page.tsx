@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CalendarDays, MapPin, ArrowLeft, Clock, CheckCircle, XCircle, Star } from 'lucide-react'
@@ -23,7 +23,8 @@ export default async function MesVisitesPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data } = await supabase
+  const adminClient = createAdminClient()
+  const { data } = await adminClient
     .from('appointments')
     .select('id, date_visite, statut, message, properties(id, titre, localisation)')
     .eq('user_id', user!.id)

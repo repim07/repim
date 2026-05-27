@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PlusCircle, Home, MapPin, ChevronRight, ArrowLeft } from 'lucide-react'
@@ -17,7 +17,8 @@ export default async function MesAnnoncesPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data } = await supabase
+  const adminClient = createAdminClient()
+  const { data } = await adminClient
     .from('properties')
     .select('id, titre, prix, devise, statut, type, localisation, photos, created_at')
     .eq('owner_id', user!.id)

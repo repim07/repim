@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { Home, ChevronLeft } from 'lucide-react'
 import { AnnonceForm } from './AnnonceForm'
 
@@ -10,7 +10,8 @@ export default async function NewAnnoncePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data } = await supabase
+  const adminClient = createAdminClient()
+  const { data } = await adminClient
     .from('profiles')
     .select('nom, role')
     .eq('id', user!.id)
