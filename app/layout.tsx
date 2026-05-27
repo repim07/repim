@@ -15,14 +15,16 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://repim.vercel.app'
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://repim.vercel.app'),
+  metadataBase: new URL(APP_URL),
   title: {
-    default: 'REPIM — Marketplace Immobilière',
+    default: 'REPIM — Immobilier en Côte d\'Ivoire',
     template: '%s | REPIM',
   },
-  description: "REPIM connecte acheteurs, vendeurs et locataires avec des agents certifiés en Côte d'Ivoire et en Afrique.",
-  keywords: ['immobilier', 'Abidjan', 'Côte d\'Ivoire', 'location', 'vente', 'appartement', 'villa'],
+  description: "Trouvez, louez ou vendez un bien immobilier en Côte d'Ivoire. REPIM connecte particuliers et professionnels certifiés à Abidjan et en Afrique de l'Ouest.",
+  keywords: ['immobilier', 'Abidjan', 'Côte d\'Ivoire', 'location', 'vente', 'appartement', 'villa', 'terrain', 'agence immobilière'],
   authors: [{ name: 'REPIM' }],
   creator: 'REPIM',
   manifest: '/manifest.webmanifest',
@@ -39,16 +41,22 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'fr_CI',
+    url: APP_URL,
     siteName: 'REPIM',
-    title: 'REPIM — Marketplace Immobilière',
-    description: "La référence de l'immobilier digital en Afrique",
-    images: [{ url: '/villa-hero.jpg', width: 1200, height: 630, alt: 'REPIM' }],
+    title: 'REPIM — Immobilier en Côte d\'Ivoire',
+    description: "Trouvez, louez ou vendez un bien immobilier avec des professionnels certifiés en Afrique de l'Ouest.",
+    images: [{
+      url: `${APP_URL}/og-image.jpg`,
+      width: 1200,
+      height: 630,
+      alt: 'REPIM — Marketplace Immobilière Afrique de l\'Ouest',
+    }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'REPIM — Marketplace Immobilière',
-    description: "La référence de l'immobilier digital en Afrique",
-    images: ['/villa-hero.jpg'],
+    title: 'REPIM — Immobilier en Côte d\'Ivoire',
+    description: "Trouvez, louez ou vendez un bien immobilier avec des professionnels certifiés.",
+    images: [`${APP_URL}/og-image.jpg`],
   },
 }
 

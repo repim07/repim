@@ -170,10 +170,9 @@ const FOOTER_LINKS = {
     { label: "Blog immobilier",    href: "#" },
   ],
   Légal: [
-    { label: "CGU",                         href: "#" },
-    { label: "Politique de confidentialité", href: "#" },
-    { label: "Mentions légales",             href: "#" },
-    { label: "Cookies",                      href: "#" },
+    { label: "CGU",                         href: "/conditions-generales" },
+    { label: "Politique de confidentialité", href: "/politique-de-confidentialite" },
+    { label: "Mentions légales",             href: "/mentions-legales" },
   ],
 };
 
