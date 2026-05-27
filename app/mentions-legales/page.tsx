@@ -3,90 +3,142 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Mentions Légales',
-  description: 'Mentions légales de la plateforme REPIM.',
+  description: 'Mentions légales de la plateforme REPIM, marketplace immobilière en Côte d\'Ivoire.',
 }
 
 export default function MentionsLegalesPage() {
   return (
-    <main className="min-h-screen bg-stone-50">
-      <div className="max-w-3xl mx-auto px-4 py-12 sm:px-6">
+    <main className="min-h-screen bg-slate-50">
+      <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
 
-        <Link href="/" className="text-sm text-orange-500 hover:text-orange-600 font-medium mb-8 inline-block">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-sm text-orange-500 hover:text-orange-600 font-medium mb-10 transition-colors"
+        >
           ← Retour à l&apos;accueil
         </Link>
 
-        <h1 className="text-3xl font-extrabold text-stone-900 mb-2">Mentions Légales</h1>
-        <p className="text-sm text-stone-500 mb-10">Dernière mise à jour : juin 2025</p>
+        <header className="mb-10 pb-8 border-b border-slate-200">
+          <h1 className="text-3xl font-extrabold text-slate-900">Mentions Légales</h1>
+          <p className="mt-2 text-sm text-slate-500">Dernière mise à jour : juin 2025</p>
+        </header>
 
-        <div className="space-y-8 text-stone-700 text-sm leading-relaxed">
+        <div className="space-y-10 text-slate-700 text-sm leading-relaxed">
 
-          <section className="bg-white rounded-2xl border border-stone-200 p-6">
-            <h2 className="text-lg font-bold text-stone-900 mb-4">Éditeur du site</h2>
-            <dl className="space-y-2">
-              {[
-                ['Raison sociale', '[Nom de l\'entreprise]'],
-                ['Forme juridique', '[SARL / SAS / SA / ...]'],
-                ['Capital social', '[Montant] FCFA'],
-                ['Siège social', '[Adresse complète], Abidjan, Côte d\'Ivoire'],
-                ['N° RCCM', '[Numéro RCCM Abidjan]'],
-                ['N° Contribuable', '[Numéro]'],
-                ['Directeur de publication', '[Nom du dirigeant]'],
-                ['Email de contact', '[contact@repim.ci]'],
-                ['Téléphone', '[+225 XX XX XX XX XX]'],
-              ].map(([label, value]) => (
-                <div key={label} className="flex flex-wrap gap-1">
-                  <dt className="font-semibold text-stone-800 min-w-[180px]">{label} :</dt>
-                  <dd className="text-stone-600">{value}</dd>
-                </div>
-              ))}
-            </dl>
+          {/* Éditeur */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+              1. Éditeur du site
+            </h2>
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <table className="w-full">
+                <tbody className="divide-y divide-slate-100">
+                  {[
+                    ['Dénomination sociale',  'REPIM'],
+                    ['Forme juridique',        'Société à Responsabilité Limitée (SARL)'],
+                    ['Capital social',         '1 000 000 FCFA'],
+                    ['Siège social',           'Cocody Angré 8e tranche Sagecim Rue L269, Abidjan, Côte d\'Ivoire'],
+                    ['Email de contact',       'repim.ci1986@gmail.com'],
+                    ['Téléphone',              '+225 01 01 04 27 76'],
+                    ['Directeur de publication', 'Le Gérant de la société REPIM'],
+                  ].map(([label, value]) => (
+                    <tr key={label}>
+                      <td className="px-5 py-3 font-semibold text-slate-700 bg-slate-50 w-48 align-top">
+                        {label}
+                      </td>
+                      <td className="px-5 py-3 text-slate-600">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
 
-          <section className="bg-white rounded-2xl border border-stone-200 p-6">
-            <h2 className="text-lg font-bold text-stone-900 mb-4">Hébergement</h2>
-            <dl className="space-y-2">
-              {[
-                ['Hébergeur', 'Vercel Inc.'],
-                ['Adresse', '340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis'],
-                ['Site web', 'https://vercel.com'],
-              ].map(([label, value]) => (
-                <div key={label} className="flex flex-wrap gap-1">
-                  <dt className="font-semibold text-stone-800 min-w-[180px]">{label} :</dt>
-                  <dd className="text-stone-600">{value}</dd>
-                </div>
-              ))}
-            </dl>
+          {/* Hébergeur */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+              2. Hébergement
+            </h2>
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <table className="w-full">
+                <tbody className="divide-y divide-slate-100">
+                  {[
+                    ['Hébergeur',  'Vercel Inc.'],
+                    ['Adresse',    '650 California St, San Francisco, CA 94108, États-Unis'],
+                    ['Site web',   'https://vercel.com'],
+                  ].map(([label, value]) => (
+                    <tr key={label}>
+                      <td className="px-5 py-3 font-semibold text-slate-700 bg-slate-50 w-48 align-top">
+                        {label}
+                      </td>
+                      <td className="px-5 py-3 text-slate-600">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
 
-          <section className="bg-white rounded-2xl border border-stone-200 p-6">
-            <h2 className="text-lg font-bold text-stone-900 mb-4">Base de données & Authentification</h2>
-            <dl className="space-y-2">
-              {[
-                ['Fournisseur', 'Supabase Inc.'],
-                ['Adresse', '970 Toa Payoh North #07-04, Singapour 318992'],
-                ['Localisation des données', 'Serveurs en Union Européenne (Frankfurt)'],
-                ['Site web', 'https://supabase.com'],
-              ].map(([label, value]) => (
-                <div key={label} className="flex flex-wrap gap-1">
-                  <dt className="font-semibold text-stone-800 min-w-[180px]">{label} :</dt>
-                  <dd className="text-stone-600">{value}</dd>
-                </div>
-              ))}
-            </dl>
+          {/* Base de données */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+              3. Base de données et authentification
+            </h2>
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <table className="w-full">
+                <tbody className="divide-y divide-slate-100">
+                  {[
+                    ['Fournisseur',              'Supabase Inc.'],
+                    ['Localisation des serveurs', 'Union Européenne (Frankfurt, Allemagne)'],
+                    ['Site web',                  'https://supabase.com'],
+                  ].map(([label, value]) => (
+                    <tr key={label}>
+                      <td className="px-5 py-3 font-semibold text-slate-700 bg-slate-50 w-48 align-top">
+                        {label}
+                      </td>
+                      <td className="px-5 py-3 text-slate-600">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
 
-          <section className="bg-white rounded-2xl border border-stone-200 p-6">
-            <h2 className="text-lg font-bold text-stone-900 mb-4">Propriété intellectuelle</h2>
+          {/* Propriété intellectuelle */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+              4. Propriété intellectuelle
+            </h2>
             <p>
-              L&apos;ensemble du contenu de ce site (textes, images, logo, code source, base de données)
-              est protégé par le droit de la propriété intellectuelle applicable en Côte d&apos;Ivoire.
-              Toute reproduction, représentation ou diffusion, même partielle, sans autorisation
-              écrite préalable de <strong>[Nom de l&apos;entreprise]</strong> est strictement interdite.
+              L&apos;ensemble des éléments constituant le site REPIM — notamment la marque, le logo,
+              le design, l&apos;architecture, les textes, les photographies, les fonctionnalités et
+              le code source — sont la propriété exclusive de la société REPIM et sont protégés par
+              la législation ivoirienne et internationale relative à la propriété intellectuelle.
+            </p>
+            <p className="mt-3">
+              Toute reproduction, représentation, modification, publication ou adaptation, totale ou
+              partielle, de ces éléments, quel que soit le moyen ou le procédé utilisé, est
+              formellement interdite sans l&apos;autorisation écrite préalable de REPIM.
+              Toute exploitation non autorisée constitue une contrefaçon sanctionnable.
             </p>
           </section>
 
-          <section className="bg-white rounded-2xl border border-stone-200 p-6">
-            <h2 className="text-lg font-bold text-stone-900 mb-4">Liens & ressources</h2>
+          {/* Droit applicable */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+              5. Droit applicable
+            </h2>
+            <p>
+              Les présentes mentions légales sont régies par le droit ivoirien, notamment
+              la loi n°2013-546 relative aux transactions électroniques et la loi n°2013-450 relative
+              à la protection des données à caractère personnel. En cas de litige, les tribunaux
+              compétents de la ville d&apos;Abidjan, Côte d&apos;Ivoire, seront seuls habilités à connaître
+              du différend.
+            </p>
+          </section>
+
+          {/* Liens */}
+          <section className="pt-4 border-t border-slate-200">
             <div className="flex flex-wrap gap-4 text-sm">
               <Link href="/conditions-generales" className="text-orange-500 hover:text-orange-600 hover:underline font-medium">
                 Conditions Générales d&apos;Utilisation
