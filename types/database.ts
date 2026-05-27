@@ -93,6 +93,9 @@ export type Database = {
           telephone: string | null
           role: string
           avatar_url: string | null
+          subscription_status: string | null
+          debloque_par_admin: boolean
+          trial_ends_at: string | null
           created_at: string
           updated_at: string
         }
@@ -103,6 +106,9 @@ export type Database = {
           telephone?: string | null
           role?: string
           avatar_url?: string | null
+          subscription_status?: string | null
+          debloque_par_admin?: boolean
+          trial_ends_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -113,6 +119,9 @@ export type Database = {
           telephone?: string | null
           role?: string
           avatar_url?: string | null
+          subscription_status?: string | null
+          debloque_par_admin?: boolean
+          trial_ends_at?: string | null
           created_at?: string
           updated_at?: string
         }
