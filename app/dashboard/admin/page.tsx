@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 import { listerUtilisateurs, listerPlans } from '@/actions/admin'
 import { Users, BadgePercent, AlertTriangle, CheckCircle2, Clock, ShieldOff } from 'lucide-react'
