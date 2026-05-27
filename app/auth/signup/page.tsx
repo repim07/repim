@@ -20,7 +20,7 @@ const ROLES: {
   pro?: boolean
 }[] = [
   { value: 'chercheur',    label: 'Chercheur',    desc: 'Je cherche un bien',      icon: Search    },
-  { value: 'proprietaire', label: 'Propriétaire', desc: 'Je loue ou vends un bien', icon: Home      },
+  { value: 'proprietaire', label: 'Propriétaire', desc: 'Je loue ou vends un bien', icon: Home,     pro: true },
   { value: 'agence',       label: 'Agence',       desc: 'Agence immobilière',       icon: Building2, pro: true },
   { value: 'promoteur',    label: 'Promoteur',    desc: 'Promotion immobilière',    icon: BarChart3, pro: true },
 ]
@@ -32,14 +32,15 @@ export default function SignupPage() {
   const [isPending, start]      = useTransition()
   const router                  = useRouter()
 
-  const isPro = role === 'agence' || role === 'promoteur'
+  const isPro       = role === 'agence' || role === 'promoteur'
+  const isProPortal = isPro  // seuls agence/promoteur → portail partenaire
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
 
-    // Les pros ont un onboarding dédié sur /partenaires/inscription
-    if (isPro) {
+    // Agences et promoteurs → portail partenaire dédié
+    if (isProPortal) {
       router.push(`/partenaires/inscription?categorie=${role}`)
       return
     }
@@ -127,7 +128,7 @@ export default function SignupPage() {
             </div>
 
             {/* Message pour les pros */}
-            {isPro ? (
+            {isProPortal ? (
               <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center">
                 <Building2 className="w-7 h-7 text-orange-500 mx-auto mb-2" />
                 <p className="text-sm font-semibold text-stone-800 mb-1">

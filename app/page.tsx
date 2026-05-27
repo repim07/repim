@@ -366,10 +366,16 @@ function Hero() {
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 leading-tight mb-4">
-              Votre recherche immobilière{" "}
-              <span className="text-orange-500">enfin simplifiée.</span>
+              Vos recherches immobilières{" "}
+              <span className="text-orange-500">enfin simplifiées.</span>
               <br />Donnez vie à vos projets.
             </h1>
+
+            <p className="text-sm font-semibold mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 tracking-wide">
+                La référence de ton Repère
+              </span>
+            </p>
 
             <p className="text-lg text-stone-600 leading-relaxed mb-4 max-w-xl">
               REPIM digitalise l&apos;ensemble du parcours immobilier — de la recherche à la signature. Annonces fiables, matching automatique, visites virtuelles et transactions sécurisées.

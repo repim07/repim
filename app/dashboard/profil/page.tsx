@@ -1,16 +1,19 @@
 export const dynamic = 'force-dynamic'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, UserCircle } from 'lucide-react'
 import { ProfilForm } from './ProfilForm'
 
 export default async function ProfilPage() {
+  // Session via cookie (client standard)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data } = await supabase
+  // Lecture du profil via service_role → contourne RLS, garantit le bon rôle
+  const adminClient = createAdminClient()
+  const { data } = await adminClient
     .from('profiles')
     .select('nom, telephone, role, email')
     .eq('id', user!.id)
@@ -34,7 +37,6 @@ export default async function ProfilPage() {
 
       <div className="pt-16 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        {/* En-tête */}
         <div className="flex items-center gap-4 mb-8">
           <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center flex-shrink-0">
             <span className="text-2xl font-extrabold text-orange-700">
@@ -45,12 +47,11 @@ export default async function ProfilPage() {
             <h1 className="text-2xl font-extrabold text-stone-900">Mon profil</h1>
             <p className="text-stone-400 text-sm mt-0.5 flex items-center gap-1.5">
               <UserCircle className="w-3.5 h-3.5" />
-              {user?.email}
+              {profile?.email ?? user?.email}
             </p>
           </div>
         </div>
 
-        {/* Formulaire */}
         <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-8">
           <h2 className="text-sm font-bold text-stone-700 uppercase tracking-widest mb-6">
             Informations personnelles
@@ -58,7 +59,7 @@ export default async function ProfilPage() {
           <ProfilForm
             nom={profile?.nom ?? ''}
             telephone={profile?.telephone ?? null}
-            email={user?.email ?? ''}
+            email={profile?.email ?? user?.email ?? ''}
             role={profile?.role ?? 'chercheur'}
           />
         </div>

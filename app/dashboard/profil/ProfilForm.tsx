@@ -19,11 +19,13 @@ export function ProfilForm({
   const [success, setSuccess] = useState(false)
   const [isPending, start]    = useTransition()
 
-  const ROLE_LABEL: Record<string, string> = {
-    chercheur:    'Chercheur',
-    agent:        'Agent immobilier',
-    proprietaire: 'Propriétaire',
-    admin:        'Administrateur',
+  const ROLE_CONFIG: Record<string, { label: string; cls: string }> = {
+    chercheur:    { label: 'Chercheur',            cls: 'bg-blue-100 text-blue-700'    },
+    proprietaire: { label: 'Propriétaire',         cls: 'bg-orange-100 text-orange-700'},
+    agence:       { label: 'Agence immobilière',   cls: 'bg-green-100 text-green-700'  },
+    promoteur:    { label: 'Promoteur immobilier', cls: 'bg-violet-100 text-violet-700'},
+    agent:        { label: 'Agent immobilier',     cls: 'bg-orange-100 text-orange-700'},
+    admin:        { label: 'Administrateur',       cls: 'bg-stone-900 text-white'      },
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -96,8 +98,8 @@ export function ProfilForm({
             Rôle <span className="text-stone-400 font-normal">(non modifiable)</span>
           </label>
           <div className="flex items-center gap-3 bg-stone-50 border border-stone-100 rounded-xl px-4 py-3">
-            <span className="inline-flex items-center gap-1.5 bg-orange-100 text-orange-700 text-xs font-semibold px-2.5 py-1 rounded-full">
-              {ROLE_LABEL[role] ?? role}
+            <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${(ROLE_CONFIG[role] ?? { cls: 'bg-stone-100 text-stone-600' }).cls}`}>
+              {(ROLE_CONFIG[role] ?? { label: role }).label}
             </span>
           </div>
         </div>
