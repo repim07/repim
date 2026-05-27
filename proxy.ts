@@ -2,13 +2,13 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 /**
- * Middleware Next.js — rafraîchit la session Supabase à chaque requête
- * et protège les routes privées (/dashboard, /annonces/new…).
+ * Proxy Next.js 16 — remplace middleware.ts (convention dépréciée).
+ * Rafraîchit la session Supabase à chaque requête et protège les routes privées.
  *
  * Si les variables Supabase ne sont pas encore configurées (.env.local),
- * le middleware laisse passer toutes les requêtes sans erreur.
+ * le proxy laisse passer toutes les requêtes sans erreur.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // ── Guard : Supabase pas encore configuré → on laisse passer ─────────────
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -55,7 +55,6 @@ export async function middleware(request: NextRequest) {
 
   if (isProtected && !user) {
     const loginUrl = request.nextUrl.clone()
-    // Les routes admin redirigent vers la console admin dédiée
     loginUrl.pathname = pathname.startsWith('/dashboard/admin')
       ? '/admin/login'
       : '/auth/login'
@@ -71,13 +70,6 @@ export async function middleware(request: NextRequest) {
   }
 
   // ── Contrôle d'accès : essai 21j expiré / abonnement inactif ────────────
-  // Tout utilisateur dont le rôle n'est ni 'chercheur' ni 'admin' bénéficie
-  // automatiquement de 21 jours d'accès gratuit à compter de son inscription.
-  // Passé ce délai sans abonnement actif et sans déblocage admin, il est
-  // redirigé vers /partenaires/abonnement.
-  //
-  // La règle est centralisée dans la fonction SQL user_has_access() :
-  //   cf. supabase/abonnements_v2.sql
   if (user && isProtected) {
     const allowedDuringBlock =
       pathname.startsWith('/partenaires/abonnement') ||
@@ -88,8 +80,6 @@ export async function middleware(request: NextRequest) {
       const { data: hasAccess } = await (supabase as any)
         .rpc('user_has_access', { p_user_id: user.id })
 
-      // hasAccess === false → blocage explicite. null/undefined → on laisse passer
-      // (RPC indisponible : on évite de couper l'app en cas de problème DB).
       if (hasAccess === false) {
         const abonnementUrl = request.nextUrl.clone()
         abonnementUrl.pathname = '/partenaires/abonnement'
