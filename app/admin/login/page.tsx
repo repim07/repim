@@ -126,12 +126,20 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          <p className="mt-5 text-center text-xs text-stone-400">
-            Vous êtes utilisateur ?{' '}
-            <Link href="/auth/login" className="text-orange-500 hover:text-orange-600 font-semibold">
-              Connexion standard
+          <div className="mt-5 pt-4 border-t border-stone-100 flex flex-col gap-2 text-center">
+            <Link
+              href="/admin/signup"
+              className="inline-flex items-center justify-center gap-2 w-full py-2.5 border-2 border-stone-200 hover:border-orange-400 hover:text-orange-600 text-stone-700 font-semibold text-sm rounded-xl transition-colors"
+            >
+              Créer un compte administrateur
             </Link>
-          </p>
+            <p className="text-xs text-stone-400">
+              Vous êtes utilisateur ?{' '}
+              <Link href="/auth/login" className="text-orange-500 hover:text-orange-600 font-semibold">
+                Connexion standard
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </main>
