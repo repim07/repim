@@ -213,7 +213,7 @@ export default function SignupPage() {
 
           <p className="mt-4 text-center text-xs text-stone-400">
             En créant un compte, vous acceptez nos{' '}
-            <a href="#" className="text-orange-400 hover:underline">conditions d&apos;utilisation</a>
+            <a href="/conditions-generales" className="text-orange-400 hover:underline">conditions d&apos;utilisation</a>
           </p>
 
           <p className="mt-3 text-center text-sm text-stone-500">

@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export async function loginAction(
@@ -9,22 +9,36 @@ export async function loginAction(
   try {
     const email      = (formData.get('email')    as string ?? '').trim()
     const password   =  formData.get('password') as string ?? ''
-    const redirectTo = (formData.get('redirect') as string) || '/dashboard'
+    const redirectTo = (formData.get('redirect') as string) || ''
 
     if (!email || !password) {
       return { error: 'Email et mot de passe requis.' }
     }
 
     const supabase = await createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
-    if (error) {
+    if (error || !data.user) {
       return { error: 'Email ou mot de passe incorrect.' }
     }
 
-    redirect(redirectTo)
+    // Redirection explicite passée (ex: depuis une route protégée)
+    if (redirectTo && redirectTo.startsWith('/')) {
+      redirect(redirectTo)
+    }
+
+    // Redirection selon le rôle (service_role pour contourner RLS)
+    const adminClient = createAdminClient()
+    const { data: profile } = await adminClient
+      .from('profiles')
+      .select('role')
+      .eq('id', data.user.id)
+      .single()
+
+    const role = (profile as { role?: string } | null)?.role ?? 'chercheur'
+
+    redirect(role === 'admin' ? '/dashboard/admin' : '/dashboard')
   } catch (err: unknown) {
-    // redirect() throws — il faut le relancer
     if (err instanceof Error && (err as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) throw err
     console.error('[loginAction]', err)
     return { error: 'Une erreur inattendue s\'est produite.' }

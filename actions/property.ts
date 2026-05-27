@@ -44,7 +44,7 @@ export type CreatePropertyInput = z.infer<typeof PropertySchema>
 // Rôles autorisés à publier
 // =============================================================================
 
-const ALLOWED_ROLES = ['agent', 'proprietaire', 'admin'] as const
+const ALLOWED_ROLES = ['agent', 'proprietaire', 'agence', 'promoteur', 'admin'] as const
 
 // =============================================================================
 // Server Action : créer une annonce
@@ -86,7 +86,7 @@ export async function createProperty(
     if (!ALLOWED_ROLES.includes(profile.role as typeof ALLOWED_ROLES[number])) {
       return {
         success: false,
-        error: 'Seuls les agents et propriétaires peuvent publier des annonces.',
+        error: 'Seuls les propriétaires, agences et promoteurs peuvent publier des annonces.',
       }
     }
 

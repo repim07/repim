@@ -17,7 +17,7 @@ export default async function NewAnnoncePage() {
     .single()
 
   const profile     = data as { nom: string; role: string } | null
-  const canPublish  = ['agent', 'proprietaire', 'admin'].includes(profile?.role ?? '')
+  const canPublish  = ['agent', 'proprietaire', 'agence', 'promoteur', 'admin'].includes(profile?.role ?? '')
 
   return (
     <div className="min-h-screen bg-stone-50">

@@ -28,8 +28,12 @@ export default async function DashboardPage() {
     chercheur:    'Chercheur',
     agent:        'Agent immobilier',
     proprietaire: 'Propriétaire',
+    agence:       'Agence immobilière',
+    promoteur:    'Promoteur immobilier',
     admin:        'Administrateur',
   }
+
+  const canPublish = ['agent', 'proprietaire', 'agence', 'promoteur', 'admin'].includes(role)
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -141,7 +145,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* CTA Publier */}
-          {['agent', 'proprietaire', 'admin'].includes(role) && (
+          {canPublish && (
             <div className="bg-orange-500 rounded-2xl p-6 text-white flex flex-col justify-between">
               <div>
                 <Building className="w-8 h-8 text-orange-200 mb-3" />
@@ -162,7 +166,7 @@ export default async function DashboardPage() {
             </div>
           )}
 
-          {role === 'chercheur' && (
+          {!canPublish && (
             <div className="bg-orange-500 rounded-2xl p-6 text-white flex flex-col justify-between">
               <div>
                 <Home className="w-8 h-8 text-orange-200 mb-3" />
