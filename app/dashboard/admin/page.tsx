@@ -7,29 +7,20 @@ import { Users, BadgePercent, AlertTriangle, CheckCircle2, Clock, ShieldOff } fr
 export default async function AdminHomePage() {
   let utilisateurs: Awaited<ReturnType<typeof listerUtilisateurs>> = []
   let plans: Awaited<ReturnType<typeof listerPlans>> = []
+  let loadError: string | null = null
 
   try {
-    ;[utilisateurs, plans] = await Promise.all([
-      listerUtilisateurs('tous'),
-      listerPlans(),
-    ])
+    utilisateurs = await listerUtilisateurs('tous')
   } catch (err) {
-    console.error('[AdminHomePage]', err)
-    return (
-      <div className="rounded-2xl bg-red-50 border border-red-200 p-6 text-center">
-        <AlertTriangle className="w-8 h-8 text-red-400 mx-auto mb-3" />
-        <p className="text-sm font-semibold text-red-700">Erreur de chargement des données</p>
-        <p className="text-xs text-red-500 mt-1">
-          Vérifiez que les tables <code>subscription_plans</code> et <code>profiles</code> sont correctement configurées.
-        </p>
-        <Link
-          href="/dashboard/admin"
-          className="mt-4 inline-block text-xs text-red-600 underline hover:text-red-800"
-        >
-          Réessayer
-        </Link>
-      </div>
-    )
+    console.error('[AdminHomePage] utilisateurs:', err)
+    loadError = err instanceof Error ? err.message : 'Erreur de chargement des utilisateurs'
+  }
+
+  try {
+    plans = await listerPlans()
+  } catch (err) {
+    console.error('[AdminHomePage] plans:', err)
+    // plans reste [] — non bloquant
   }
 
   const stats = {
@@ -67,6 +58,13 @@ export default async function AdminHomePage() {
           21 jours d&apos;accès gratuit pour tout nouvel utilisateur (sauf chercheurs et admin).
         </p>
       </div>
+
+      {loadError && (
+        <div className="mb-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center gap-2 text-sm text-amber-700">
+          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+          <span>Données partielles : {loadError}</span>
+        </div>
+      )}
 
       {/* Stats cards — 2 colonnes mobile, 3 desktop */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-8">

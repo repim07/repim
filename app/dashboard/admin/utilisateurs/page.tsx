@@ -1,6 +1,9 @@
+export const dynamic = 'force-dynamic'
+
 import { listerUtilisateurs, type UtilisateurAdminRow } from '@/actions/admin'
 import { UtilisateurActions } from './actions-client'
 import Link from 'next/link'
+import { AlertTriangle } from 'lucide-react'
 
 const ETAT_STYLES: Record<UtilisateurAdminRow['etat_effectif'], string> = {
   admin:              'bg-stone-900 text-white border-stone-900',
@@ -45,7 +48,14 @@ export default async function AdminUtilisateursPage({
 }) {
   const params = await searchParams
   const filtre = (params.filtre as 'tous' | 'essai' | 'abonnes' | 'expires') || 'tous'
-  const utilisateurs = await listerUtilisateurs(filtre)
+
+  let utilisateurs: UtilisateurAdminRow[] = []
+  let loadError: string | null = null
+  try {
+    utilisateurs = await listerUtilisateurs(filtre)
+  } catch (err) {
+    loadError = err instanceof Error ? err.message : 'Erreur de chargement'
+  }
 
   const filtres = [
     { id: 'tous',     label: 'Tous' },
@@ -56,6 +66,12 @@ export default async function AdminUtilisateursPage({
 
   return (
     <div>
+      {loadError && (
+        <div className="mb-4 px-4 py-3 rounded-xl bg-red-50 border border-red-200 flex items-center gap-2 text-sm text-red-700">
+          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+          <span>{loadError}</span>
+        </div>
+      )}
       <div className="mb-6 flex items-end justify-between flex-wrap gap-3">
         <div>
           <h2 className="text-2xl font-bold text-stone-900">Utilisateurs</h2>

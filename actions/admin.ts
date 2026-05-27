@@ -22,7 +22,9 @@ async function assertAdmin(): Promise<string> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Non authentifié')
 
-  const { data: profile } = await supabase
+  // service_role pour contourner RLS
+  const admin = createAdminClient()
+  const { data: profile } = await admin
     .from('profiles')
     .select('role')
     .eq('id', user.id)
@@ -296,7 +298,11 @@ export async function listerPlans(): Promise<PlanRow[]> {
     .select('*')
     .order('ordre', { ascending: true })
 
-  if (error) throw new Error(error.message)
+  // Table pas encore créée → retourner tableau vide au lieu de crasher
+  if (error) {
+    console.warn('[listerPlans]', error.message)
+    return []
+  }
   return (data ?? []) as PlanRow[]
 }
 
