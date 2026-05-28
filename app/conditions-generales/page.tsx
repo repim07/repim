@@ -97,7 +97,7 @@ export default function CGUPage() {
             <p>
               L&apos;accès à la Plateforme est partiellement gratuit. Certaines fonctionnalités réservées
               aux professionnels (agents, agences, promoteurs) sont soumises à un abonnement payant,
-              après une <strong>période d&apos;essai gratuite de 21 jours</strong>.
+              après une <strong>période d&apos;essai gratuite de 14 jours</strong>.
             </p>
             <p className="mt-3">
               Les tarifs des abonnements disponibles sont présentés sur la page dédiée et peuvent être

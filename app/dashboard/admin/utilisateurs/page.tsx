@@ -59,7 +59,7 @@ export default async function AdminUtilisateursPage({
 
   const filtres = [
     { id: 'tous',     label: 'Tous' },
-    { id: 'essai',    label: 'Essai 21j' },
+    { id: 'essai',    label: 'Essai 14j' },
     { id: 'abonnes',  label: 'Abonnés' },
     { id: 'expires',  label: 'Expirés / suspendus' },
   ] as const
@@ -77,7 +77,7 @@ export default async function AdminUtilisateursPage({
           <h2 className="text-2xl font-bold text-stone-900">Utilisateurs</h2>
           <p className="text-sm text-stone-500 mt-1">
             {utilisateurs.length} utilisateur{utilisateurs.length > 1 ? 's' : ''} —
-            essai 21j gratuit pour tous sauf chercheurs et admin
+            essai 14j gratuit pour tous sauf chercheurs et admin
           </p>
         </div>
       </div>

@@ -51,7 +51,7 @@ const AVANTAGES = [
   'Tableau de bord de gestion avance',
   'Badge partenaire verifie sur votre profil',
   'Acces aux statistiques et leads qualifies',
-  '21 jours d\'essai gratuit sans engagement',
+  '14 jours d\'essai gratuit sans engagement',
 ]
 
 // Plans d\'abonnement
@@ -278,7 +278,7 @@ function InscriptionWizard() {
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-1.5 bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full border border-orange-200">
               <Zap className="w-3 h-3" />
-              21 jours gratuits
+              14 jours gratuits
             </div>
             <Link href="/auth/login" className="text-xs text-stone-500 hover:text-orange-500 transition-colors">
               Deja partenaire ? <span className="font-semibold text-orange-500">Se connecter</span>
@@ -329,14 +329,14 @@ function InscriptionWizard() {
               </ul>
             </div>
 
-            {/* Banniere 21 jours */}
+            {/* Banniere 14 jours */}
             <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-4 text-white shadow-md mb-4">
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Star className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="font-extrabold text-sm">21 jours d&apos;essai gratuit</p>
+                  <p className="font-extrabold text-sm">14 jours d&apos;essai gratuit</p>
                   <p className="text-orange-100 text-xs mt-0.5 leading-relaxed">
                     Sans engagement, sans carte bancaire. Publiez vos coordonnees des maintenant.
                   </p>
@@ -588,11 +588,11 @@ function InscriptionWizard() {
                     <p className="text-stone-400 text-xs mt-1">Etape 3 sur 3 &mdash; Choisissez votre plan</p>
                   </div>
 
-                  {/* Banniere 21 jours */}
+                  {/* Banniere 14 jours */}
                   <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                     <p className="text-sm text-green-800 font-semibold">
-                      21 jours d&apos;essai gratuit &mdash; aucun paiement immediate requis
+                      14 jours d&apos;essai gratuit &mdash; aucun paiement immédiat requis
                     </p>
                   </div>
 
@@ -695,7 +695,7 @@ function InscriptionWizard() {
                     </div>
                     <div className="border-t border-stone-200 pt-2 mt-2 flex justify-between text-green-700 font-bold">
                       <span>Aujourd&apos;hui</span>
-                      <span>GRATUIT (21 jours d&apos;essai)</span>
+                      <span>GRATUIT (14 jours d&apos;essai)</span>
                     </div>
                   </div>
 

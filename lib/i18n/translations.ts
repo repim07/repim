@@ -93,6 +93,7 @@ const FR = {
     subtitle: 'Tout ce que vous devez savoir sur REPIM.',
     noAnswer: 'Vous ne trouvez pas votre réponse ?', contactTeam: 'Contactez notre équipe',
     items: [
+      { q: 'Combien de temps dure la période d\'essai gratuit ?',       a: "La période d'essai est de 14 jours, sans engagement et sans carte bancaire requise. Elle commence dès la création de votre compte professionnel et vous donne accès à toutes les fonctionnalités. À l'issue des 14 jours, vous choisissez librement un abonnement pour continuer." },
       { q: 'REPIM est-il gratuit pour les chercheurs ?',               a: "Oui, la navigation, la recherche et la consultation des annonces sont totalement gratuites pour les locataires et acheteurs. Seuls les professionnels souscrivent à un abonnement pour publier." },
       { q: 'Comment fonctionne la vérification des annonces ?',        a: "Chaque annonce est soumise à une vérification manuelle avant publication. Les professionnels doivent fournir un dossier KYC complet (pièces d'identité, agrément MCLU). Cela garantit zéro arnaque." },
       { q: 'Puis-je visiter un bien à distance ?',                     a: "Absolument. REPIM propose des visites virtuelles intégrées pour la plupart des biens. Vous pouvez aussi planifier une visite physique directement depuis la fiche du bien." },
@@ -243,6 +244,7 @@ const EN: typeof FR = {
     subtitle: "Everything you need to know about REPIM. Can't find your answer? Contact our support.",
     noAnswer: "Can't find your answer?", contactTeam: 'Contact our team',
     items: [
+      { q: 'How long is the free trial period?',                  a: 'The free trial lasts 14 days, with no commitment and no credit card required. It starts as soon as you create your professional account and gives you access to all features. After 14 days, you freely choose a subscription plan to continue.' },
       { q: 'Is REPIM free for searchers?',                       a: 'Yes, browsing, searching and viewing listings are completely free for tenants and buyers. Only professionals subscribe to a plan to publish listings.' },
       { q: 'How does listing verification work?',                 a: 'Each listing undergoes manual review before publication. Professionals must provide a complete KYC file. This guarantees zero fraud on the platform.' },
       { q: 'Can I visit a property remotely?',                    a: 'Absolutely. REPIM offers integrated virtual tours for most available properties. You can also schedule an in-person visit directly from the property page.' },
@@ -393,6 +395,7 @@ const AR: typeof FR = {
     subtitle: 'كل ما تحتاج معرفته عن REPIM.',
     noAnswer: 'لم تجد إجابتك؟', contactTeam: 'تواصل مع فريقنا',
     items: [
+      { q: 'ما مدة الفترة التجريبية المجانية؟',             a: 'الفترة التجريبية المجانية تمتد 14 يوماً، بدون أي التزام ودون الحاجة إلى بطاقة بنكية. تبدأ فور إنشاء حسابك المهني وتتيح الوصول إلى جميع الميزات. بعد 14 يوماً، تختار بحرية خطة اشتراك للمتابعة.' },
       { q: 'هل REPIM مجاني للباحثين؟',                  a: 'نعم، التصفح والبحث وعرض الإعلانات مجاني تماماً للمستأجرين والمشترين. المحترفون فقط يشتركون في خطة لنشر الإعلانات.' },
       { q: 'كيف يعمل التحقق من الإعلانات؟',              a: 'كل إعلان يخضع للمراجعة اليدوية من فريقنا قبل النشر. يجب على المحترفين تقديم ملف KYC كامل. هذا يضمن صفر احتيال على المنصة.' },
       { q: 'هل يمكنني زيارة عقار عن بُعد؟',              a: 'بالتأكيد. تقدم REPIM جولات افتراضية مدمجة لمعظم العقارات المتاحة. يمكنك أيضاً جدولة زيارة شخصية مباشرة من صفحة العقار.' },
@@ -543,6 +546,7 @@ const CH: typeof FR = {
     subtitle: '关于REPIM您需要了解的一切。',
     noAnswer: '找不到答案？', contactTeam: '联系我们的团队',
     items: [
+      { q: '免费试用期有多长？',                   a: '免费试用期为14天，无需承诺，无需银行卡。试用从您创建专业账户时即刻开始，可访问所有功能。14天后，您可自由选择订阅计划继续使用。' },
       { q: 'REPIM对搜索者是免费的吗？',           a: '是的，浏览、搜索和查看广告对租户和买家完全免费。只有专业人士才需要订阅计划来发布广告。' },
       { q: '广告验证是如何工作的？',               a: '每个广告在发布前都要经过我们团队的人工审核。专业人士必须提供完整的KYC文件。这保证了平台上零欺诈。' },
       { q: '我可以远程参观房产吗？',               a: '当然可以。REPIM为大多数可用房产提供集成虚拟参观。您也可以直接从房产页面安排实地参观。' },

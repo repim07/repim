@@ -32,7 +32,7 @@ CREATE OR REPLACE FUNCTION handle_new_partenaire()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.essai_fin IS NULL THEN
-    NEW.essai_fin := NOW() + INTERVAL '21 days';
+    NEW.essai_fin := NOW() + INTERVAL '14 days';
   END IF;
 
   -- Si le statut est encore au défaut 'inactif', on accorde l'essai
@@ -51,9 +51,9 @@ CREATE TRIGGER partenaires_essai_init
   BEFORE INSERT ON public.partenaires
   FOR EACH ROW EXECUTE FUNCTION handle_new_partenaire();
 
--- Backfill : les partenaires existants sans essai_fin reçoivent 21j à partir de leur création
+-- Backfill : les partenaires existants sans essai_fin reçoivent 14j à partir de leur création
 UPDATE public.partenaires
-   SET essai_fin = created_at + INTERVAL '21 days'
+   SET essai_fin = created_at + INTERVAL '14 days'
  WHERE essai_fin IS NULL;
 
 -- ─────────────────────────────────────────────────────────────────────────────

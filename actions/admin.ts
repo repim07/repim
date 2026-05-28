@@ -248,7 +248,7 @@ export async function retirerDeblocageUtilisateur(profileId: string) {
   revalidatePath('/dashboard/admin/utilisateurs')
 }
 
-export async function reinitialiserEssaiUtilisateur(profileId: string, jours = 21) {
+export async function reinitialiserEssaiUtilisateur(profileId: string, jours = 14) {
   await assertAdmin()
   const admin = adminAny()
 

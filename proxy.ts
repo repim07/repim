@@ -69,7 +69,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(dashboardUrl)
   }
 
-  // ── Contrôle d'accès : essai 21j expiré / abonnement inactif ────────────
+  // ── Contrôle d'accès : essai 14j expiré / abonnement inactif ────────────
   if (user && isProtected) {
     const allowedDuringBlock =
       pathname.startsWith('/partenaires/abonnement') ||

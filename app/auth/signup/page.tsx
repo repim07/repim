@@ -21,7 +21,7 @@ const AVANTAGES_PRO = [
   'Tableau de bord de gestion avance',
   'Badge partenaire verifie sur votre profil',
   'Acces aux statistiques et leads qualifies',
-  '21 jours d\'essai gratuit sans engagement (PRO)',
+  '14 jours d\'essai gratuit sans engagement (PRO)',
 ]
 
 // =============================================================================
@@ -152,10 +152,10 @@ export default function SignupPage() {
               className="h-9 w-auto object-contain" priority />
           </Link>
           <div className="flex items-center gap-4">
-            {/* Badge 21 jours */}
+            {/* Badge 14 jours */}
             <div className="hidden sm:flex items-center gap-1.5 bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full border border-orange-200">
               <Zap className="w-3 h-3" />
-              21 jours d&apos;essai gratuit
+              14 jours d&apos;essai gratuit
             </div>
             <Link href="/auth/login" className="text-sm text-stone-600 hover:text-orange-600 transition-colors">
               Deja inscrit ?{' '}
@@ -194,18 +194,18 @@ export default function SignupPage() {
                 </h1>
                 <p className="mt-4 text-stone-500 text-base leading-relaxed">
                   Choisissez votre profil et publiez vos annonces <strong>des maintenant</strong>.
-                  Acces immediat &mdash; 21 jours d&apos;essai gratuit &mdash; certification a votre rythme.
+                  Acces immediat &mdash; 14 jours d&apos;essai gratuit &mdash; certification a votre rythme.
                 </p>
               </div>
 
-              {/* Banniere 21 jours essai */}
+              {/* Banniere 14 jours essai */}
               <div className="mb-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
                 <div className="flex items-center gap-3 text-white">
                   <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
                     <Star className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="font-extrabold text-base">21 jours d&apos;essai gratuit sans engagement</p>
+                    <p className="font-extrabold text-base">14 jours d&apos;essai gratuit sans engagement</p>
                     <p className="text-orange-100 text-sm">Publiez vos annonces immediatement &mdash; aucune carte bancaire requise</p>
                   </div>
                 </div>
@@ -333,14 +333,14 @@ export default function SignupPage() {
                     </ul>
                   </div>
 
-                  {/* Banniere 21 jours essai */}
+                  {/* Banniere 14 jours essai */}
                   <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-4 text-white shadow-md">
                     <div className="flex items-start gap-3">
                       <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
                         <Zap className="w-4 h-4" />
                       </div>
                       <div>
-                        <p className="font-extrabold text-sm">21 jours d&apos;essai gratuit</p>
+                        <p className="font-extrabold text-sm">14 jours d&apos;essai gratuit</p>
                         <p className="text-orange-100 text-xs mt-0.5 leading-relaxed">
                           Sans engagement, sans carte bancaire. Publiez des maintenant.
                         </p>

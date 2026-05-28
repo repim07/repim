@@ -1,11 +1,11 @@
 -- =============================================================================
--- REPIM — Migration V2 : essai 21 jours porté sur PROFILES (et plus sur partenaires)
+-- REPIM — Migration V2 : essai 14 jours porté sur PROFILES (et plus sur partenaires)
 --
 -- Objectif :
 --   - tout utilisateur dont le rôle n'est ni 'chercheur' ni 'admin' bénéficie
---     automatiquement de 21 jours d'accès gratuit à partir de la création du
---     compte (profile.created_at + 21 days)
---   - après 21 jours, l'utilisateur est redirigé vers /partenaires/abonnement
+--     automatiquement de 14 jours d'accès gratuit à partir de la création du
+--     compte (profile.created_at + 14 days)
+--   - après 14 jours, l'utilisateur est redirigé vers /partenaires/abonnement
 --   - l'admin peut suspendre / activer / débloquer manuellement
 --   - une suspension automatique nocturne passe les abonnements payés expirés
 --     au statut 'expired' (cf. expire_old_subscriptions())
@@ -37,17 +37,17 @@ CREATE INDEX IF NOT EXISTS idx_profiles_subscription_end_date
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 2. Backfill : tous les profils existants reçoivent un trial_end_date
---    (21 jours après leur création s'ils n'en ont pas déjà un)
+--    (14 jours après leur création s'ils n'en ont pas déjà un)
 -- ─────────────────────────────────────────────────────────────────────────────
 
 UPDATE public.profiles
-   SET trial_end_date = created_at + INTERVAL '21 days'
+   SET trial_end_date = created_at + INTERVAL '14 days'
  WHERE trial_end_date IS NULL;
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 3. Patch du trigger handle_new_user pour initialiser le trial à l'inscription
 --    Le trigger existant crée le profil avec role='chercheur'.
---    On ajoute trial_end_date = NOW() + 21 days + subscription_status = 'trial'.
+--    On ajoute trial_end_date = NOW() + 14 days + subscription_status = 'trial'.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION handle_new_user()
@@ -58,7 +58,7 @@ BEGIN
     NEW.id,
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'nom', split_part(NEW.email, '@', 1)),
-    NOW() + INTERVAL '21 days',
+    NOW() + INTERVAL '14 days',
     'trial'
   );
   RETURN NEW;

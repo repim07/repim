@@ -76,13 +76,13 @@ export function UtilisateurActions({ utilisateur }: { utilisateur: UtilisateurAd
             <button
               disabled={isPending}
               onClick={() => run(
-                () => reinitialiserEssaiUtilisateur(utilisateur.id, 21),
-                `Réinitialiser un essai de 21 jours pour ${utilisateur.nom || utilisateur.email} ?`
+                () => reinitialiserEssaiUtilisateur(utilisateur.id, 14),
+                `Réinitialiser un essai de 14 jours pour ${utilisateur.nom || utilisateur.email} ?`
               )}
               className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-left text-stone-700 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-40 transition-colors"
             >
               <RotateCcw className="w-4 h-4" />
-              Relancer un essai 21j
+              Relancer un essai 14j
             </button>
 
             <div className="border-t border-stone-100" />

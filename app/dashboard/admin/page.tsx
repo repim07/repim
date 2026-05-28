@@ -34,7 +34,7 @@ export default async function AdminHomePage() {
 
   const cards = [
     { label: 'Utilisateurs total',   value: stats.total,     icon: Users,         color: 'orange', href: '/dashboard/admin/utilisateurs' },
-    { label: 'En essai 21 jours',    value: stats.essai,     icon: Clock,         color: 'blue',   href: '/dashboard/admin/utilisateurs?filtre=essai' },
+    { label: 'En essai 14 jours',    value: stats.essai,     icon: Clock,         color: 'blue',   href: '/dashboard/admin/utilisateurs?filtre=essai' },
     { label: 'Abonnés actifs',       value: stats.actifs,    icon: CheckCircle2,  color: 'green',  href: '/dashboard/admin/utilisateurs?filtre=abonnes' },
     { label: 'Expirés (à relancer)', value: stats.expires,   icon: AlertTriangle, color: 'red',    href: '/dashboard/admin/utilisateurs?filtre=expires' },
     { label: 'Suspendus',            value: stats.suspendus, icon: ShieldOff,     color: 'amber',  href: '/dashboard/admin/utilisateurs?filtre=expires' },
@@ -55,7 +55,7 @@ export default async function AdminHomePage() {
       <div className="mb-6">
         <h2 className="text-xl font-bold text-stone-900">Vue d&apos;ensemble</h2>
         <p className="text-xs text-stone-500 mt-1">
-          21 jours d&apos;accès gratuit pour tout nouvel utilisateur (sauf chercheurs et admin).
+          14 jours d&apos;accès gratuit pour tout nouvel utilisateur (sauf chercheurs et admin).
         </p>
       </div>
 
