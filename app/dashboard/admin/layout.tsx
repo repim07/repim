@@ -3,14 +3,13 @@ export const dynamic = 'force-dynamic'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient, createAdminClient } from '@/lib/supabase/server'
-import { ShieldCheck, Users, BadgePercent, LayoutDashboard } from 'lucide-react'
+import { ShieldCheck, Users, BadgePercent, LayoutDashboard, ClipboardCheck } from 'lucide-react'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/admin/login')
 
-  // Lecture via service_role pour contourner RLS
   const adminClient = createAdminClient()
   const { data: profile } = await adminClient
     .from('profiles')
@@ -19,6 +18,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .single()
 
   if (profile?.role !== 'admin') redirect('/dashboard')
+
+  const navItems = [
+    { href: '/dashboard/admin',              label: "Vue d'ensemble", Icon: LayoutDashboard },
+    { href: '/dashboard/admin/utilisateurs', label: 'Utilisateurs',   Icon: Users           },
+    { href: '/dashboard/admin/validations',  label: 'Certifications', Icon: ClipboardCheck  },
+    { href: '/dashboard/admin/tarifs',       label: 'Tarifs',         Icon: BadgePercent    },
+  ]
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -46,11 +52,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       {/* Navigation admin */}
       <nav className="bg-white border-b border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-1 overflow-x-auto">
-          {[
-            { href: '/dashboard/admin',              label: 'Vue d’ensemble', icon: LayoutDashboard },
-            { href: '/dashboard/admin/utilisateurs', label: 'Utilisateurs',   icon: Users },
-            { href: '/dashboard/admin/tarifs',       label: 'Tarifs',         icon: BadgePercent },
-          ].map(({ href, label, icon: Icon }) => (
+          {navItems.map(({ href, label, Icon }) => (
             <Link
               key={href}
               href={href}
