@@ -2,7 +2,23 @@
 // REPIM — Types TypeScript pour la base de données Supabase
 // =============================================================================
 
-export type UserRole = 'chercheur' | 'agent' | 'proprietaire' | 'admin'
+export type UserRole =
+  | 'chercheur'
+  | 'agent'
+  | 'proprietaire'
+  | 'admin'
+  | 'promoteur'
+  | 'agence'
+  | 'communaute'
+
+export type VerificationStatus =
+  | 'draft'
+  | 'pending_review'
+  | 'verified'
+  | 'rejected'
+  | 'suspended'
+
+export type ProCategorie = 'agence' | 'promoteur' | 'proprietaire' | 'communaute' | 'agent'
 export type PropertyType = 'location' | 'vente' | 'colocation' | 'residence_meublee' | 'lotissement'
 export type PropertyStatus =
   | 'actif'
@@ -211,6 +227,99 @@ export type Database = {
           message?: string | null
           created_at?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      pro_profiles: {
+        Row: {
+          id:                  string
+          categorie:           string
+          prenom:              string
+          email_pro:           string
+          telephone_pro:       string
+          raison_sociale:      string | null
+          adresse:             Json
+          verification_status: string
+          submitted_at:        string | null
+          reviewed_at:         string | null
+          reviewed_by:         string | null
+          rejection_reason:    string | null
+          created_at:          string
+          updated_at:          string
+        }
+        Insert: {
+          id:                  string
+          categorie:           string
+          prenom:              string
+          email_pro:           string
+          telephone_pro:       string
+          raison_sociale?:     string | null
+          adresse?:            Json
+          verification_status?: string
+          submitted_at?:       string | null
+          reviewed_at?:        string | null
+          reviewed_by?:        string | null
+          rejection_reason?:   string | null
+          created_at?:         string
+          updated_at?:         string
+        }
+        Update: {
+          id?:                 string
+          categorie?:          string
+          prenom?:             string
+          email_pro?:          string
+          telephone_pro?:      string
+          raison_sociale?:     string | null
+          adresse?:            Json
+          verification_status?: string
+          submitted_at?:       string | null
+          reviewed_at?:        string | null
+          reviewed_by?:        string | null
+          rejection_reason?:   string | null
+          created_at?:         string
+          updated_at?:         string
+        }
+        Relationships: []
+      }
+      pro_documents: {
+        Row: {
+          id:             string
+          pro_profile_id: string
+          doc_type:       string
+          storage_path:   string
+          numero:         string | null
+          date_emission:  string | null
+          date_expiration: string | null
+          status:         string
+          reviewer_notes: string | null
+          uploaded_at:    string
+          reviewed_at:    string | null
+        }
+        Insert: {
+          id?:            string
+          pro_profile_id: string
+          doc_type:       string
+          storage_path:   string
+          numero?:        string | null
+          date_emission?: string | null
+          date_expiration?: string | null
+          status?:        string
+          reviewer_notes?: string | null
+          uploaded_at?:   string
+          reviewed_at?:   string | null
+        }
+        Update: {
+          id?:            string
+          pro_profile_id?: string
+          doc_type?:      string
+          storage_path?:  string
+          numero?:        string | null
+          date_emission?: string | null
+          date_expiration?: string | null
+          status?:        string
+          reviewer_notes?: string | null
+          uploaded_at?:   string
+          reviewed_at?:   string | null
         }
         Relationships: []
       }

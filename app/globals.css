@@ -123,3 +123,20 @@ body {
 .pricing-btn-shimmer:hover {
   animation: shimmer-sweep 0.7s ease forwards;
 }
+
+/* ── Transitions entre étapes du wizard d'inscription ──────────────────────── */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
