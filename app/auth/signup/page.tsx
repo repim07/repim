@@ -1,20 +1,20 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createProAccount } from '@/actions/auth'
 import {
-  Building2, BadgeCheck, Home, Users, User as UserIcon,
+  Building2, BadgeCheck, Home, Users, User as UserIcon, Briefcase,
   Search, Mail, Lock, Phone, ArrowRight, Eye, EyeOff,
   ChevronLeft, ChevronRight, CheckCircle, FileText, ShieldCheck,
   Zap, Star,
 } from 'lucide-react'
 
 // =============================================================================
-// Avantages PRO — liste des 6 points mis en avant
+// Avantages PRO
 // =============================================================================
-
 const AVANTAGES_PRO = [
   'Visibilite aupres de 750 000+ utilisateurs',
   'Publication illimitee d\'annonces',
@@ -25,9 +25,8 @@ const AVANTAGES_PRO = [
 ]
 
 // =============================================================================
-// Catalogue des roles PRO
+// Types
 // =============================================================================
-
 type ProRole = 'agence' | 'promoteur' | 'proprietaire' | 'communaute' | 'agent'
 
 type RoleConfig = {
@@ -36,17 +35,32 @@ type RoleConfig = {
   tagline:      string
   icon:         React.ElementType
   needsCompany: boolean
-  kycSummary:   string   // Simplifie : sans RCCM ni DFE
+  kycSummary:   string
   badgeFuture:  string
-  isPro:        boolean  // affiche le badge "PRO" sur la carte
+  isPro:        boolean
 }
 
-// 4 cartes principales
+// Definit une entree dans la grille de selection (toutes egales)
+type CardDef = {
+  id:       string
+  label:    string
+  tagline:  string
+  icon:     React.ElementType
+  badge:    string
+  badgeCls: string  // classes du badge (couleur)
+  iconCls:  string  // classes du container icone
+  href?:    string  // navigation directe (chercheur)
+  role?:    RoleConfig // selection role pro
+}
+
+// =============================================================================
+// Catalogue des roles PRO
+// =============================================================================
 const PRIMARY_ROLES: RoleConfig[] = [
   {
     value:        'agence',
-    label:        'PRO Agence',
-    tagline:      'Vous gerez un portefeuille de biens pour des clients',
+    label:        'Agence Immobiliere',
+    tagline:      'Gerez un portefeuille de biens pour vos clients',
     icon:         Building2,
     needsCompany: true,
     kycSummary:   'Agrement MCLU + CNI du dirigeant',
@@ -55,8 +69,8 @@ const PRIMARY_ROLES: RoleConfig[] = [
   },
   {
     value:        'promoteur',
-    label:        'PRO Promoteur',
-    tagline:      'Vous construisez et commercialisez vos programmes',
+    label:        'Promoteur',
+    tagline:      'Construisez et commercialisez vos programmes',
     icon:         BadgeCheck,
     needsCompany: true,
     kycSummary:   'Agrement MCLU + CNI du dirigeant',
@@ -66,7 +80,7 @@ const PRIMARY_ROLES: RoleConfig[] = [
   {
     value:        'proprietaire',
     label:        'Proprietaire',
-    tagline:      'Vous louez ou vendez directement votre bien',
+    tagline:      'Louez ou vendez votre bien directement',
     icon:         Home,
     needsCompany: false,
     kycSummary:   'CNI ou passeport (piece d\'identite)',
@@ -76,7 +90,7 @@ const PRIMARY_ROLES: RoleConfig[] = [
   {
     value:        'communaute',
     label:        'Mandataire PRO',
-    tagline:      'Vous representez une famille, un village, un lotissement',
+    tagline:      'Representez une famille, un village ou un lotissement',
     icon:         Users,
     needsCompany: false,
     kycSummary:   'CNI + Attestation villageoise ou avis de lotissement',
@@ -85,12 +99,11 @@ const PRIMARY_ROLES: RoleConfig[] = [
   },
 ]
 
-// Option secondaire
 const AGENT_ROLE: RoleConfig = {
   value:        'agent',
-  label:        'Mandataire PRO',
-  tagline:      'Vous mettez en relation acheteurs et vendeurs en freelance',
-  icon:         UserIcon,
+  label:        'Demarcheur Independant',
+  tagline:      'Mettez en relation acheteurs et vendeurs en freelance',
+  icon:         Briefcase,
   needsCompany: false,
   kycSummary:   'CNI + Mandat signe du proprietaire ou carte pro',
   badgeFuture:  'Mandataire verifie',
@@ -98,21 +111,98 @@ const AGENT_ROLE: RoleConfig = {
 }
 
 // =============================================================================
+// Grille unifiee — 6 cartes de taille identique
+// Ordre : Chercheur · Demarcheur · Agence · Promoteur · Proprietaire · Mandataire
+// =============================================================================
+const ALL_CARDS: CardDef[] = [
+  {
+    id:       'chercheur',
+    label:    'Chercheur',
+    tagline:  'Recherchez un bien a louer ou a acheter',
+    icon:     Search,
+    badge:    'PARTICULIER',
+    badgeCls: 'bg-sky-500/20 text-sky-300 border border-sky-500/30',
+    iconCls:  'bg-sky-500/10 text-sky-400 group-hover:bg-sky-500/20 group-hover:text-sky-300',
+    href:     '/auth/signup/chercheur',
+  },
+  {
+    id:       'agent',
+    label:    'Demarcheur',
+    tagline:  'Mettez en relation acheteurs et vendeurs',
+    icon:     Briefcase,
+    badge:    'SOLO',
+    badgeCls: 'bg-amber-400/20 text-amber-300 border border-amber-400/30',
+    iconCls:  'bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 group-hover:text-amber-300',
+    role:     AGENT_ROLE,
+  },
+  {
+    id:       'agence',
+    label:    'Agence Immobiliere',
+    tagline:  'Gerez un portefeuille pour vos clients',
+    icon:     Building2,
+    badge:    'PRO',
+    badgeCls: 'bg-orange-500 text-white',
+    iconCls:  'bg-orange-500/10 text-orange-400 group-hover:bg-orange-500/20 group-hover:text-orange-300',
+    role:     PRIMARY_ROLES[0],
+  },
+  {
+    id:       'promoteur',
+    label:    'Promoteur',
+    tagline:  'Construisez et commercialisez vos programmes',
+    icon:     BadgeCheck,
+    badge:    'PRO',
+    badgeCls: 'bg-orange-500 text-white',
+    iconCls:  'bg-orange-500/10 text-orange-400 group-hover:bg-orange-500/20 group-hover:text-orange-300',
+    role:     PRIMARY_ROLES[1],
+  },
+  {
+    id:       'proprietaire',
+    label:    'Proprietaire',
+    tagline:  'Louez ou vendez votre bien directement',
+    icon:     Home,
+    badge:    'INDEP',
+    badgeCls: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30',
+    iconCls:  'bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 group-hover:text-emerald-300',
+    role:     PRIMARY_ROLES[2],
+  },
+  {
+    id:       'mandataire',
+    label:    'Mandataire PRO',
+    tagline:  'Representez une famille ou un lotissement',
+    icon:     Users,
+    badge:    'PRO',
+    badgeCls: 'bg-orange-500 text-white',
+    iconCls:  'bg-violet-500/10 text-violet-400 group-hover:bg-violet-500/20 group-hover:text-violet-300',
+    role:     PRIMARY_ROLES[3],
+  },
+]
+
+// =============================================================================
 // Composant principal — Wizard 2 etapes
 // =============================================================================
-
 export default function SignupPage() {
-  const [step,       setStep]     = useState<'select' | 'form'>('select')
-  const [selected,   setSelected] = useState<RoleConfig | null>(null)
-  const [showPwd,    setShowPwd]  = useState(false)
-  const [error,      setError]    = useState<string | null>(null)
-  const [isPending,  start]       = useTransition()
+  const router = useRouter()
 
-  function chooseRole(role: RoleConfig) {
-    setSelected(role)
-    setError(null)
-    setStep('form')
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
+  const [step,      setStep]     = useState<'select' | 'form'>('select')
+  const [selected,  setSelected] = useState<RoleConfig | null>(null)
+  const [showPwd,   setShowPwd]  = useState(false)
+  const [error,     setError]    = useState<string | null>(null)
+  const [isPending, start]       = useTransition()
+
+  const isDark = step === 'select'
+
+  // Clic sur une carte de la grille
+  function handleCardClick(card: CardDef) {
+    if (card.href) {
+      router.push(card.href)
+      return
+    }
+    if (card.role) {
+      setSelected(card.role)
+      setError(null)
+      setStep('form')
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }
 
   function backToSelection() {
@@ -142,24 +232,51 @@ export default function SignupPage() {
   // ===========================================================================
 
   return (
-    <main className="min-h-screen bg-stone-50 flex flex-col">
+    <main
+      className={`min-h-screen flex flex-col transition-colors duration-500 ${
+        isDark ? 'bg-[#080e1a]' : 'bg-stone-50'
+      }`}
+    >
 
-      {/* Header */}
-      <header className="border-b border-stone-200/60 bg-white sticky top-0 z-40">
+      {/* ── Header (adaptatif dark/light) ───────────────────────────────── */}
+      <header
+        className={`sticky top-0 z-40 border-b transition-all duration-500 ${
+          isDark
+            ? 'bg-slate-900/95 border-slate-800/60 backdrop-blur-md'
+            : 'bg-white border-stone-200/60'
+        }`}
+      >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" aria-label="Retour accueil REPIM">
-            <Image src="/logo-repim.png" alt="REPIM" width={110} height={36}
-              className="h-9 w-auto object-contain" priority />
+            <Image
+              src="/logo-repim.png" alt="REPIM"
+              width={110} height={36}
+              className="h-9 w-auto object-contain"
+              priority
+            />
           </Link>
           <div className="flex items-center gap-4">
-            {/* Badge 14 jours */}
-            <div className="hidden sm:flex items-center gap-1.5 bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full border border-orange-200">
+            {/* Badge essai */}
+            <div
+              className={`hidden sm:flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border transition-colors ${
+                isDark
+                  ? 'bg-orange-500/10 text-orange-400 border-orange-500/20'
+                  : 'bg-orange-50 text-orange-600 border-orange-200'
+              }`}
+            >
               <Zap className="w-3 h-3" />
               14 jours d&apos;essai gratuit
             </div>
-            <Link href="/auth/login" className="text-sm text-stone-600 hover:text-orange-600 transition-colors">
+            <Link
+              href="/auth/login"
+              className={`text-sm transition-colors ${
+                isDark ? 'text-slate-400 hover:text-sky-400' : 'text-stone-600 hover:text-orange-600'
+              }`}
+            >
               Deja inscrit ?{' '}
-              <span className="font-semibold text-orange-600">Se connecter</span>
+              <span className={`font-semibold ${isDark ? 'text-sky-400' : 'text-orange-600'}`}>
+                Se connecter
+              </span>
             </Link>
           </div>
         </div>
@@ -170,115 +287,111 @@ export default function SignupPage() {
 
           {step === 'select' ? (
             // =================================================================
-            // STEP 1 — Selection visuelle du role
+            // STEP 1 — Grille de selection (theme bleu marine)
             // =================================================================
             <div className="animate-fade-in-up">
 
-              {/* CTA chercheur en haut */}
-              <div className="mb-10 text-center">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-stone-400 font-semibold mb-3">
-                  Vous cherchez un bien a louer ou a acheter ?
-                </p>
-                <Link href="/auth/signup/chercheur"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-stone-700 hover:text-orange-600 underline underline-offset-4 decoration-stone-300 hover:decoration-orange-400 transition-colors">
-                  <Search className="w-4 h-4" />
-                  Creer un compte chercheur (gratuit, sans dossier)
-                </Link>
-              </div>
-
-              {/* Titre */}
+              {/* Titre + eyebrow */}
               <div className="text-center mb-10 max-w-2xl mx-auto">
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight leading-tight">
-                  Vous etes professionnel
-                  <span className="block text-orange-600">de l&apos;immobilier ?</span>
+
+                {/* Eyebrow pill */}
+                <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[11px] font-extrabold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest">
+                  <Zap className="w-3 h-3" />
+                  14 jours gratuits &mdash; aucune carte bancaire
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                  Quel est votre
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-sky-400">
+                    profil REPIM ?
+                  </span>
                 </h1>
-                <p className="mt-4 text-stone-500 text-base leading-relaxed">
-                  Choisissez votre profil et publiez vos annonces <strong>des maintenant</strong>.
-                  Acces immediat &mdash; 14 jours d&apos;essai gratuit &mdash; certification a votre rythme.
+                <p className="mt-4 text-slate-400 text-sm leading-relaxed">
+                  Choisissez votre statut, publiez vos annonces et certifiez votre compte a votre rythme.
                 </p>
               </div>
 
-              {/* Banniere 14 jours essai */}
-              <div className="mb-8 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
-                <div className="flex items-center gap-3 text-white">
-                  <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Star className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="font-extrabold text-base">14 jours d&apos;essai gratuit sans engagement</p>
-                    <p className="text-orange-100 text-sm">Publiez vos annonces immediatement &mdash; aucune carte bancaire requise</p>
-                  </div>
-                </div>
-                <div className="flex-shrink-0 bg-white text-orange-600 text-xs font-extrabold px-4 py-2 rounded-xl shadow-sm whitespace-nowrap">
-                  Offre PRO
-                </div>
-              </div>
-
-              {/* 4 cartes principales */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-                {PRIMARY_ROLES.map((role) => {
-                  const Icon = role.icon
+              {/* ── Grille : 6 cartes identiques (2 cols mobile, 3 cols sm+) ── */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-10">
+                {ALL_CARDS.map((card) => {
+                  const Icon = card.icon
                   return (
-                    <button key={role.value} type="button" onClick={() => chooseRole(role)}
-                      className="group relative text-left bg-white border border-stone-200 rounded-2xl p-5 hover:border-orange-400 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 min-h-[260px] flex flex-col">
+                    <button
+                      key={card.id}
+                      type="button"
+                      onClick={() => handleCardClick(card)}
+                      className={`
+                        group relative flex flex-col items-center text-center
+                        bg-slate-800/50 border border-slate-700/50
+                        rounded-2xl p-4 sm:p-5
+                        h-52 sm:h-56
+                        cursor-pointer
+                        hover:bg-slate-800/80
+                        hover:border-sky-500/40
+                        hover:shadow-[0_0_40px_-8px_rgba(56,189,248,0.3)]
+                        active:scale-[0.97]
+                        transition-all duration-300
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50
+                        focus-visible:ring-offset-2 focus-visible:ring-offset-transparent
+                      `}
+                    >
+                      {/* Badge top-right */}
+                      <span
+                        className={`
+                          absolute top-3 right-3
+                          text-[8px] sm:text-[9px] font-extrabold tracking-widest
+                          px-1.5 py-0.5 rounded-md uppercase
+                          ${card.badgeCls}
+                        `}
+                      >
+                        {card.badge}
+                      </span>
 
-                      {/* Badge PRO */}
-                      {role.isPro && (
-                        <span className="absolute top-3 right-3 text-[9px] font-extrabold tracking-widest bg-orange-500 text-white px-1.5 py-0.5 rounded-md uppercase">
-                          PRO
-                        </span>
-                      )}
-
-                      <div className="w-12 h-12 rounded-xl bg-stone-100 group-hover:bg-orange-500 text-stone-600 group-hover:text-white flex items-center justify-center mb-4 transition-colors">
-                        <Icon className="w-5 h-5" />
+                      {/* Icone */}
+                      <div
+                        className={`
+                          w-12 h-12 sm:w-14 sm:h-14 rounded-2xl
+                          flex items-center justify-center
+                          mb-3 sm:mb-4 flex-shrink-0
+                          transition-all duration-300
+                          ${card.iconCls}
+                        `}
+                      >
+                        <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                       </div>
-                      <h3 className="text-base font-bold text-stone-900 mb-1.5 leading-tight pr-6">
-                        {role.label}
+
+                      {/* Label */}
+                      <h3 className="text-xs sm:text-sm font-extrabold text-white leading-snug mb-1.5 px-1">
+                        {card.label}
                       </h3>
-                      <p className="text-xs text-stone-500 leading-relaxed mb-4 flex-1">
-                        {role.tagline}
+
+                      {/* Tagline — 1 ligne max */}
+                      <p className="text-[10px] sm:text-[11px] text-slate-400 leading-snug line-clamp-2 group-hover:text-slate-300 transition-colors px-1">
+                        {card.tagline}
                       </p>
-                      <div className="pt-4 mt-auto border-t border-stone-100">
-                        <p className="text-[10px] text-stone-400 uppercase tracking-wider font-semibold mb-1">
-                          Document requis
-                        </p>
-                        <p className="text-[11px] text-stone-600 leading-snug mb-3">
-                          {role.kycSummary}
-                        </p>
-                        <div className="flex items-center text-sm font-semibold text-stone-700 group-hover:text-orange-600 transition-colors">
-                          Continuer
-                          <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
-                        </div>
+
+                      {/* CTA */}
+                      <div className="mt-auto pt-2 flex items-center gap-0.5 text-[10px] sm:text-[11px] font-semibold text-slate-600 group-hover:text-sky-400 transition-colors">
+                        Choisir ce profil
+                        <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </button>
                   )
                 })}
               </div>
 
-              {/* Option secondaire */}
-              <div className="border-t border-stone-200/60 pt-8 text-center">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-stone-400 font-semibold mb-3">
-                  Vous travaillez en tant que demarcheur independant ?
-                </p>
-                <button type="button" onClick={() => chooseRole(AGENT_ROLE)}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-stone-700 hover:text-orange-600 underline underline-offset-4 decoration-stone-300 hover:decoration-orange-400 transition-colors">
-                  <UserIcon className="w-4 h-4" />
-                  Inscrire mon profil Mandataire PRO
-                </button>
-              </div>
-
               {/* Reassurance */}
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-stone-400">
+              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-slate-600">
                 <span className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
                   Inscription securisee
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <CheckCircle className="w-3.5 h-3.5 text-green-500" />
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
                   Publication immediate en mode provisoire
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-green-500" />
+                  <FileText className="w-3.5 h-3.5 text-emerald-500" />
                   Certification sous 48h (1 seul document)
                 </span>
               </div>
@@ -459,7 +572,7 @@ export default function SignupPage() {
                         </div>
                       </div>
 
-                      {/* Note document requis (simplifie) */}
+                      {/* Note document requis */}
                       {selected && (
                         <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
                           <div className="flex items-start gap-3">
