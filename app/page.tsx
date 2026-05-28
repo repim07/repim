@@ -349,7 +349,7 @@ function Hero() {
           <div className="order-1 lg:order-2">
             <div className="relative">
               <div className="w-full aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden">
-                <Image src="/villa-hero.jpg" alt="Villa haut standing REPIM" fill className="object-cover" priority />
+                <Image src="/villa-hero.jpeg" alt="Villa haut standing REPIM" fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
                   <span className="inline-flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-stone-800 text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">
