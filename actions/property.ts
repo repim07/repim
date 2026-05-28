@@ -35,7 +35,9 @@ const PropertySchema = z.object({
   surface_m2:  z.number().positive().optional(),
   nb_pieces:   z.number().int().positive().max(50).optional(),
   standing:    z.enum(['social', 'normal', 'haut_standing']).optional(),
-  photos:      z.array(z.string().url('URL de photo invalide')).max(10).default([]),
+  // On accepte toute string (URL publique Supabase Storage) — pas de validation .url()
+  // stricte car certains CDN Supabase peuvent ne pas passer la validation RFC.
+  photos:      z.array(z.string().min(1)).max(12).default([]),
 })
 
 export type CreatePropertyInput = z.infer<typeof PropertySchema>
@@ -44,7 +46,8 @@ export type CreatePropertyInput = z.infer<typeof PropertySchema>
 // Rôles autorisés à publier
 // =============================================================================
 
-const ALLOWED_ROLES = ['agent', 'proprietaire', 'agence', 'promoteur', 'admin'] as const
+// communaute peut publier des terrains/lotissements
+const ALLOWED_ROLES = ['agent', 'proprietaire', 'agence', 'promoteur', 'communaute', 'admin'] as const
 
 // =============================================================================
 // Server Action : créer une annonce
@@ -122,7 +125,7 @@ export async function createProperty(
 
     // ── 5. Revalidation du cache Next.js ──────────────────────────────────────
     revalidatePath('/annonces')
-    revalidatePath('/dashboard/mes-annonces')
+    revalidatePath('/dashboard/annonces')
 
     return { success: true, data: data as unknown as Property }
 
@@ -167,7 +170,7 @@ export async function updatePropertyStatus(
 
     revalidatePath('/annonces')
     revalidatePath(`/annonces/${propertyId}`)
-    revalidatePath('/dashboard/mes-annonces')
+    revalidatePath('/dashboard/annonces')
 
     return { success: true, data: undefined }
 
@@ -208,7 +211,7 @@ export async function deleteProperty(
     }
 
     revalidatePath('/annonces')
-    revalidatePath('/dashboard/mes-annonces')
+    revalidatePath('/dashboard/annonces')
 
     return { success: true, data: undefined }
 
