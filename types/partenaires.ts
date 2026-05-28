@@ -13,6 +13,7 @@ export type CategoriePartenaire =
   | 'huissier'
   | 'architecte'
   | 'conseiller'
+  | 'geometre'
   | 'autre'
 
 export type StatutAbonnement =
@@ -53,5 +54,6 @@ export const CATEGORIE_VERS_ROLE: Record<CategoriePartenaire, string> = {
   huissier:         'agent',
   architecte:       'agent',
   conseiller:       'agent',
+  geometre:         'agent',
   autre:            'agent',
 }

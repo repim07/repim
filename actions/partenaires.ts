@@ -17,7 +17,7 @@ import {
 
 const CATEGORIES_VALIDES = [
   'agence', 'promoteur', 'notaire', 'cabinet_juridique',
-  'assurance', 'huissier', 'architecte', 'conseiller', 'autre',
+  'assurance', 'huissier', 'architecte', 'conseiller', 'geometre', 'autre',
 ] as const
 
 const InscriptionSchema = z.object({

@@ -7,10 +7,10 @@ import { PlusCircle, Home, MapPin, ChevronRight, ArrowLeft } from 'lucide-react'
 
 const STATUT: Record<string, { label: string; cls: string }> = {
   actif:                 { label: 'Actif',        cls: 'bg-green-100 text-green-700'   },
-  loue:                  { label: 'Loué',         cls: 'bg-blue-100 text-blue-700'     },
+  loue:                  { label: 'Loue',         cls: 'bg-blue-100 text-blue-700'     },
   vendu:                 { label: 'Vendu',        cls: 'bg-blue-100 text-blue-700'     },
   inactif:               { label: 'Inactif',      cls: 'bg-stone-100 text-stone-500'   },
-  en_attente_validation: { label: 'En attente',   cls: 'bg-yellow-100 text-yellow-700' },
+  en_attente_validation: { label: 'Provisoire',   cls: 'bg-amber-100 text-amber-700'   },
 }
 
 export default async function MesAnnoncesPage() {

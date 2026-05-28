@@ -103,9 +103,11 @@ interface DocRequirement {
   alternatives: string[][]       // groupes d'alternatives (un par groupe suffit)
 }
 
+// RCCM et DFE retires du parcours d'inscription pour simplifier les conversions.
+// Seuls l'agrement MCLU et la CNI sont requis pour les agences et promoteurs.
 const DOC_REQUIREMENTS: Record<string, DocRequirement> = {
-  agence:       { required: ['agrement_mclu','rccm','dfe','cni_dirigeant'], alternatives: [] },
-  promoteur:    { required: ['agrement_mclu','rccm','dfe','cni_dirigeant'], alternatives: [] },
+  agence:       { required: ['agrement_mclu', 'cni_dirigeant'], alternatives: [] },
+  promoteur:    { required: ['agrement_mclu', 'cni_dirigeant'], alternatives: [] },
   proprietaire: { required: ['cni_dirigeant'], alternatives: [] },
   communaute:   { required: ['cni_dirigeant'], alternatives: [['attestation_villageoise','avis_lotissement']] },
   agent:        { required: ['cni_dirigeant'], alternatives: [['attestation_mandat','carte_professionnelle']] },

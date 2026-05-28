@@ -180,8 +180,10 @@ export default async function DashboardPage() {
 
   // ─── 4. Dérivation des états clés ─────────────────────────────────────────
   const isVerified  = verificationStatus === 'verified'
-  const canPublish  = isPro && isVerified
-  const actionCards = getActionCards(role, isVerified)
+  // Tout PRO peut publier dès la création du compte.
+  // Les annonces sont en statut "en_attente_validation" (provisoire) jusqu'à la certification KYC.
+  const canPublish  = isPro
+  const actionCards = getActionCards(role, true)  // true = toutes les tuiles déverrouillées
   const kycStatus   = verificationStatus ? KYC_STATUS_LABELS[verificationStatus] : null
 
   // ─── 5. Rendu ─────────────────────────────────────────────────────────────
@@ -431,26 +433,33 @@ export default async function DashboardPage() {
             </div>
 
           ) : isPro ? (
-            /* Pro NON vérifié → CTA dossier KYC */
-            <div className="bg-stone-800 rounded-2xl p-6 text-white flex flex-col justify-between">
+            /* Pro NON vérifié → peut publier en provisoire + CTA KYC */
+            <div className="bg-orange-500 rounded-2xl p-6 text-white flex flex-col justify-between">
               <div>
-                <ShieldCheck className="w-8 h-8 text-stone-400 mb-3" />
+                <Building className="w-8 h-8 text-orange-200 mb-3" />
                 <h3 className="font-bold text-lg leading-snug mb-2">
-                  Certification en attente
+                  Publiez des maintenant
                 </h3>
-                <p className="text-stone-300 text-sm leading-relaxed">
-                  Une fois votre dossier validé, vous pourrez publier vos biens et apparaître dans les résultats.
+                <p className="text-orange-100 text-sm leading-relaxed mb-3">
+                  Vos annonces sont visibles en mode <span className="font-bold">provisoire</span> jusqu&apos;a la validation de votre dossier KYC.
                 </p>
+                {verificationStatus !== 'pending_review' && (
+                  <Link
+                    href="/dashboard/kyc"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-200 hover:text-white transition-colors"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    Completer mon dossier KYC pour debloquer
+                  </Link>
+                )}
               </div>
-              {verificationStatus !== 'pending_review' && (
-                <Link
-                  href="/dashboard/kyc"
-                  className="mt-5 inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm py-2.5 px-4 rounded-xl transition-colors"
-                >
-                  <FileText className="w-4 h-4" />
-                  Mon dossier KYC
-                </Link>
-              )}
+              <Link
+                href="/annonces/new"
+                className="mt-5 inline-flex items-center justify-center gap-2 bg-white text-orange-600 font-bold text-sm py-2.5 px-4 rounded-xl hover:bg-orange-50 transition-colors"
+              >
+                <PlusCircle className="w-4 h-4" />
+                Publier maintenant
+              </Link>
             </div>
 
           ) : (

@@ -104,13 +104,32 @@ export async function createProperty(
       }
     }
 
-    // ── 4. Insertion en base ──────────────────────────────────────────────────
+    // ── 4. Détermination du statut de publication ─────────────────────────────
+    // Les pros non encore vérifiés publient en mode "provisoire" (en_attente_validation).
+    // Une fois certifiés (verification_status = 'verified'), leurs annonces passent à 'actif'.
+    let propertyStatut: 'actif' | 'en_attente_validation' = 'en_attente_validation'
+
+    try {
+      const { data: proRow } = await supabase
+        .from('pro_profiles')
+        .select('verification_status')
+        .eq('id', user.id)
+        .maybeSingle()
+
+      if ((proRow as { verification_status?: string } | null)?.verification_status === 'verified') {
+        propertyStatut = 'actif'
+      }
+    } catch {
+      // Si la ligne n'existe pas (proprietaire sans pro_profile), on laisse en_attente_validation
+    }
+
+    // ── 5. Insertion en base ──────────────────────────────────────────────────
     const { data, error: insertError } = await supabase
       .from('properties')
       .insert({
         ...parsed.data,
         owner_id: user.id,
-        statut:   'actif',
+        statut:   propertyStatut,
       })
       .select()
       .single()
@@ -123,7 +142,7 @@ export async function createProperty(
       }
     }
 
-    // ── 5. Revalidation du cache Next.js ──────────────────────────────────────
+    // ── 6. Revalidation du cache Next.js ──────────────────────────────────────
     revalidatePath('/annonces')
     revalidatePath('/dashboard/annonces')
 
