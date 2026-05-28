@@ -52,9 +52,16 @@ const PARTNER_LABELS = [
   "Autre professionnel",
 ];
 
-const PROPERTY_ICONS = [TreePine, Home, Briefcase, Building, Wrench, BadgeCheck];
-const FEATURE_ICONS  = [Zap, Video, MessageSquare, Bell];
-const STEP_ICONS     = [Search, Video, Handshake];
+const PROPERTY_ICONS  = [TreePine, Home, Briefcase, Building, Wrench, BadgeCheck];
+const FEATURE_ICONS   = [Zap, Video, MessageSquare, Bell];
+const STEP_ICONS      = [Search, Video, Handshake];
+
+// Images réelles pour les 2 premières cartes de types de biens
+const PROPERTY_IMAGES: (string | null)[] = [
+  '/annonce-terrain-pro.jpg',      // Terrains
+  '/annonce-appartement-chic.jpg', // Villas & Appartements
+  null, null, null, null,
+];
 
 // =============================================================================
 // NAVBAR
@@ -299,7 +306,12 @@ function Hero() {
   }
 
   return (
-    <section id="hero" className="pt-24 pb-16 lg:pt-32 lg:pb-24 bg-gradient-to-br from-orange-50 via-white to-stone-50">
+    <section id="hero" className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
+      {/* Fond abstrait — opacité très douce */}
+      <div className="absolute inset-0 -z-10">
+        <Image src="/background-abstrait-header.jpeg" alt="" fill className="object-cover" style={{ opacity: 0.08 }} priority />
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-50/95 via-white/90 to-stone-50/95" />
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
@@ -410,14 +422,22 @@ function PropertyTypes() {
           {t.propertyTypes.items.map((type, i) => {
             const Icon = PROPERTY_ICONS[i];
             const slugs = ["terrains", "villas", "affaires", "gestions", "renovations", "architecture"];
+            const imgSrc = PROPERTY_IMAGES[i];
             return (
               <a key={type.label} href={`/annonces?categorie=${slugs[i]}`}
-                className="group flex flex-col items-center text-center bg-orange-900/50 hover:bg-orange-500 border border-orange-800 hover:border-orange-400 rounded-2xl p-4 transition-all duration-300 cursor-pointer">
-                <div className="w-12 h-12 bg-orange-800 group-hover:bg-orange-400 rounded-xl flex items-center justify-center mb-3 transition-colors">
-                  <Icon className="w-6 h-6 text-orange-300 group-hover:text-white transition-colors" />
+                className={`group relative flex flex-col items-center text-center border rounded-2xl p-4 transition-all duration-300 cursor-pointer overflow-hidden ${imgSrc ? "border-orange-700 hover:border-orange-400 hover:scale-[1.03]" : "bg-orange-900/50 hover:bg-orange-500 border-orange-800 hover:border-orange-400"}`}>
+                {/* Image de fond pour les cartes vedettes */}
+                {imgSrc && (
+                  <>
+                    <Image src={imgSrc} alt={type.label} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-orange-950/65 group-hover:bg-orange-600/70 transition-colors duration-300" />
+                  </>
+                )}
+                <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-colors ${imgSrc ? "bg-white/20 group-hover:bg-white/30" : "bg-orange-800 group-hover:bg-orange-400"}`}>
+                  <Icon className="w-6 h-6 text-white transition-colors" />
                 </div>
-                <p className="text-sm font-bold text-orange-100 group-hover:text-white mb-1">{type.label}</p>
-                <p className="text-xs text-orange-400 group-hover:text-orange-100 leading-tight transition-colors">{type.description}</p>
+                <p className="relative z-10 text-sm font-bold text-orange-100 group-hover:text-white mb-1">{type.label}</p>
+                <p className="relative z-10 text-xs text-orange-300 group-hover:text-orange-100 leading-tight transition-colors">{type.description}</p>
               </a>
             );
           })}
@@ -434,7 +454,12 @@ function PropertyTypes() {
 function Features() {
   const { t } = useLang();
   return (
-    <section id="fonctionnalites" className="py-20 lg:py-28 bg-white">
+    <section id="fonctionnalites" className="relative py-20 lg:py-28 bg-white overflow-hidden">
+      {/* Fond bureau très subtil */}
+      <div className="absolute inset-0 -z-10">
+        <Image src="/bureau-investissement.jpg" alt="" fill className="object-cover" style={{ opacity: 0.05 }} />
+        <div className="absolute inset-0 bg-white/92" />
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <span className="text-orange-500 text-sm font-semibold uppercase tracking-widest">{t.features.badge}</span>
@@ -529,9 +554,19 @@ function Testimonials() {
               </div>
               <p className="text-sm text-stone-600 leading-relaxed mb-6 italic flex-1">&ldquo;{item.text}&rdquo;</p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-700 text-sm font-bold flex-shrink-0">
-                  {item.avatar}
-                </div>
+                {item.avatar === 'AK' ? (
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-orange-200">
+                    <Image src="/client-temoignage-1.jpeg" alt={item.name} width={40} height={40} className="object-cover w-full h-full" />
+                  </div>
+                ) : item.avatar === 'YK' ? (
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-orange-200">
+                    <Image src="/avatar-architechte-exemple.jpeg" alt={item.name} width={40} height={40} className="object-cover w-full h-full" />
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-700 text-sm font-bold flex-shrink-0">
+                    {item.avatar}
+                  </div>
+                )}
                 <div>
                   <p className="text-sm font-semibold text-stone-900">{item.name}</p>
                   <p className="text-xs text-stone-400">{item.role}</p>
@@ -761,32 +796,45 @@ function Newsletter() {
   }
 
   return (
-    <section id="newsletter" className="py-16 bg-white border-t border-stone-100">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-        <div className="inline-flex items-center gap-2 bg-orange-50 text-orange-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
+    <section id="newsletter" className="relative py-20 overflow-hidden">
+      {/* Fond principal — décor abstrait sombre */}
+      <div className="absolute inset-0 -z-10">
+        <Image src="/decor-abstrait-newsletter.jpeg" alt="" fill className="object-cover" />
+        <div className="absolute inset-0 bg-stone-950/82" />
+      </div>
+      {/* Motif décoratif côté droit */}
+      <div className="absolute right-0 top-0 bottom-0 w-2/5 -z-10 hidden lg:block">
+        <Image src="/motif-abstrait-newsletter.jpeg" alt="" fill className="object-cover opacity-[0.18]" />
+        <div className="absolute inset-0 bg-gradient-to-l from-transparent to-stone-950/60" />
+      </div>
+      {/* Lueur orange décorative */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-orange-500/10 rounded-full blur-3xl -z-10" />
+
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center relative z-10">
+        <div className="inline-flex items-center gap-2 bg-orange-500/15 text-orange-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-5 border border-orange-500/30 backdrop-blur-sm">
           <Bell className="w-3.5 h-3.5" />{t.newsletter.badge}
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 mb-3">{t.newsletter.h2}</h2>
-        <p className="text-stone-500 text-sm mb-8 leading-relaxed">{t.newsletter.subtitle}</p>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">{t.newsletter.h2}</h2>
+        <p className="text-stone-300 text-sm mb-8 leading-relaxed">{t.newsletter.subtitle}</p>
         {sent ? (
-          <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm font-semibold px-6 py-3 rounded-xl">
+          <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-300 text-sm font-semibold px-6 py-3 rounded-xl backdrop-blur-sm">
             <CheckCircle className="w-4 h-4" />{t.newsletter.success}
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <div className="flex-1 flex items-center gap-3 bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
-              <Mail className="w-4 h-4 text-stone-400 flex-shrink-0" />
+            <div className="flex-1 flex items-center gap-3 bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-500/30 transition-all backdrop-blur-sm">
+              <Mail className="w-4 h-4 text-stone-300 flex-shrink-0" />
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                 placeholder={t.newsletter.placeholder}
-                className="flex-1 bg-transparent text-sm text-stone-700 placeholder-stone-400 outline-none" />
+                className="flex-1 bg-transparent text-sm text-white placeholder-stone-400 outline-none" />
             </div>
             <button type="submit" disabled={isPending}
-              className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-70 text-white font-bold px-5 py-3 rounded-xl transition-colors whitespace-nowrap">
+              className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-400 disabled:opacity-70 text-white font-bold px-5 py-3 rounded-xl transition-colors whitespace-nowrap shadow-lg shadow-orange-500/25">
               <Send className="w-4 h-4" />{isPending ? "..." : t.newsletter.btn}
             </button>
           </form>
         )}
-        <p className="mt-4 text-xs text-stone-400">{t.newsletter.privacy}</p>
+        <p className="mt-4 text-xs text-stone-500">{t.newsletter.privacy}</p>
       </div>
     </section>
   );
