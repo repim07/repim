@@ -122,6 +122,91 @@ export async function inscrirePartenaire(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Server Action : créer un compte partenaire SANS redirect (pour paiement)
+// Retourne { success, userId, email, nomStructure } au lieu de redirect.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function creerComptePartenaire(
+  formData: FormData
+): Promise<{ error: string } | { success: true; userId: string; email: string; nomStructure: string }> {
+  try {
+    // 1. Validation
+    const raw = {
+      nom_structure: formData.get('nom_structure'),
+      categorie:     formData.get('categorie'),
+      email:         formData.get('email'),
+      password:      formData.get('password'),
+    }
+
+    const parsed = InscriptionSchema.safeParse(raw)
+    if (!parsed.success) {
+      return { error: parsed.error.issues[0].message }
+    }
+
+    const { nom_structure, categorie, email, password } = parsed.data
+    const roleProfile = CATEGORIE_VERS_ROLE[categorie] ?? 'agent'
+
+    // 2. Création du compte Supabase Auth
+    const supabase = await createClient()
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nom: nom_structure, role: roleProfile },
+      },
+    })
+
+    if (authError) {
+      if (authError.message.toLowerCase().includes('already registered')) {
+        return { error: 'Cette adresse email est deja utilisee.' }
+      }
+      return { error: authError.message }
+    }
+
+    if (!authData.user) {
+      return { error: 'La creation du compte a echoue. Veuillez reessayer.' }
+    }
+
+    const userId = authData.user.id
+
+    // 3. Mise à jour du profil
+    await new Promise((r) => setTimeout(r, 500))
+    const admin = createAdminClient()
+
+    const { error: profileError } = await admin
+      .from('profiles')
+      .update({ nom: nom_structure, role: roleProfile })
+      .eq('id', userId)
+
+    if (profileError) {
+      console.error('[creerComptePartenaire] profile update:', profileError.message)
+    }
+
+    // 4. Insertion partenaire avec statut 'en_attente' (paiement requis)
+    const { error: partenaireError } = await admin
+      .from('partenaires')
+      .insert({
+        user_id:           userId,
+        nom_structure,
+        categorie,
+        statut_abonnement: 'en_attente',
+        date_debut_abo:    null,
+        date_fin_abo:      null,
+      })
+
+    if (partenaireError) {
+      console.error('[creerComptePartenaire] partenaire insert:', partenaireError.message)
+      return { error: 'Compte cree, mais erreur lors de l\'enregistrement partenaire.' }
+    }
+
+    return { success: true, userId, email, nomStructure: nom_structure }
+  } catch (err) {
+    console.error('[creerComptePartenaire]', err)
+    return { error: 'Une erreur inattendue s\'est produite. Veuillez reessayer.' }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Server Action : initier un paiement Mobile Money
 // ─────────────────────────────────────────────────────────────────────────────
 

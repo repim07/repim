@@ -12,7 +12,7 @@ import { useState, useRef, useTransition, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { inscrirePartenaire } from '@/actions/partenaires'
+import { creerComptePartenaire } from '@/actions/partenaires'
 import type { CategoriePartenaire } from '@/types/partenaires'
 import {
   Building2, Mail, Lock, Phone, MapPin, ArrowRight, ArrowLeft,
@@ -62,9 +62,9 @@ const PLANS = [
   { id: 'annuel',      label: 'Annuel',      price: '200 000', devise: 'XOF/an',     euro: '~305 EUR',  popular: false },
 ]
 
-// Moyens de paiement
+// Moyens de paiement (geres par GeniusPay automatiquement)
 const PAIEMENTS = [
-  { id: 'cinetpay',   label: 'CinetPay',    icon: CreditCard,  desc: 'Carte Visa / Mastercard' },
+  { id: 'geniuspay',  label: 'GeniusPay',   icon: CreditCard,  desc: 'Visa, Mastercard, Mobile Money' },
   { id: 'orange',     label: 'Orange Money', icon: Smartphone,  desc: 'Paiement mobile Orange CI' },
   { id: 'wave',       label: 'Wave',         icon: Wallet,      desc: 'Paiement mobile Wave' },
   { id: 'mtn',        label: 'MTN MoMo',     icon: Smartphone,  desc: 'Mobile Money MTN' },
@@ -158,7 +158,7 @@ function InscriptionWizard() {
 
   // ── Donnees step 3 ──
   const [planChoisi,    setPlanChoisi]    = useState<string>('semestriel')
-  const [paiement,      setPaiement]     = useState<string>('cinetpay')
+  const [paiement,      setPaiement]     = useState<string>('geniuspay')
   const [submitted,     setSubmitted]    = useState(false)
 
   // ── Navigation entre etapes ──
@@ -208,6 +208,7 @@ function InscriptionWizard() {
   }
 
   // ── Soumission finale (step 3) ──
+  // Flux : creerComptePartenaire() → /api/payments/genius-pay → redirect paymentUrl
   function handleFinalSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
@@ -221,39 +222,45 @@ function InscriptionWizard() {
 
     start(async () => {
       try {
-        const res = await inscrirePartenaire(fd)
-        if (res?.error) {
-          setError(res.error)
-        } else {
-          setSubmitted(true)
+        // Etape 1 : creation du compte (server action, sans redirect)
+        const compteRes = await creerComptePartenaire(fd)
+        if ('error' in compteRes) {
+          setError(compteRes.error)
+          return
         }
+
+        // Etape 2 : initiation du paiement GeniusPay
+        const gpRes = await fetch('/api/payments/genius-pay', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            plan:  planChoisi,
+            phone: telephone,
+          }),
+        })
+
+        const gpData = await gpRes.json() as { paymentUrl?: string; error?: string }
+
+        if (!gpRes.ok || !gpData.paymentUrl) {
+          // Le compte est cree mais le paiement a echoue — rediriger vers le dashboard
+          // pour que l'utilisateur puisse reessayer depuis son espace.
+          const msg = gpData.error ?? 'Erreur passerelle de paiement.'
+          console.error('[wizard] GeniusPay error:', msg)
+          // On redirige quand meme vers le dashboard (essai gratuit actif)
+          window.location.href = '/dashboard?paiement=echec'
+          return
+        }
+
+        // Etape 3 : redirection vers la page de paiement GeniusPay
+        window.location.href = gpData.paymentUrl
       } catch (err: unknown) {
-        if (err instanceof Error && (err as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) throw err
+        console.error('[wizard] submit error:', err)
         setError('Une erreur inattendue s\'est produite. Veuillez reessayer.')
       }
     })
   }
 
-  // ── Ecran de succes ──
-  if (submitted) {
-    return (
-      <div className="text-center py-20">
-        <div className="w-20 h-20 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <CheckCircle className="w-10 h-10 text-green-500" />
-        </div>
-        <h2 className="text-2xl font-extrabold text-stone-900 mb-3">Inscription validee !</h2>
-        <p className="text-stone-500 text-base mb-2 max-w-md mx-auto">
-          Votre compte partenaire REPIM Pro est cree. Vous avez <strong>21 jours d&apos;essai gratuit</strong>.
-        </p>
-        <p className="text-stone-400 text-sm mb-8">Un email de confirmation a ete envoye a <strong>{email}</strong>.</p>
-        <Link href="/dashboard"
-          className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-xl transition-colors shadow-md">
-          Acceder a mon espace
-          <ArrowRight className="w-5 h-5" />
-        </Link>
-      </div>
-    )
-  }
+  // Pas d'ecran de succes ici — la redirection va vers /paiement/succes via GeniusPay
 
   // ==========================================================================
   // RENDU PRINCIPAL
@@ -627,11 +634,11 @@ function InscriptionWizard() {
                     </div>
                   </div>
 
-                  {/* Moyen de paiement (simule) */}
+                  {/* Moyen de paiement */}
                   <div>
                     <label className="block text-sm font-semibold text-stone-700 mb-3">
-                      Moyen de paiement prefere
-                      <span className="text-stone-400 font-normal ml-1">(sera utilise apres l&apos;essai)</span>
+                      Moyen de paiement
+                      <span className="text-stone-400 font-normal ml-1">(vous serez redirige vers la page de paiement)</span>
                     </label>
                     <div className="grid grid-cols-2 gap-2.5">
                       {PAIEMENTS.map((pm) => {
@@ -704,11 +711,11 @@ function InscriptionWizard() {
                       {isPending ? (
                         <>
                           <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                          Validation en cours...
+                          Creation du compte...
                         </>
                       ) : (
                         <>
-                          VALIDER MON INSCRIPTION
+                          VALIDER ET PAYER
                           <ArrowRight className="w-4 h-4" />
                         </>
                       )}
