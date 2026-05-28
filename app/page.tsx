@@ -506,6 +506,40 @@ function HowItWorks() {
 }
 
 // =============================================================================
+// STAR RATING — gère les demi-étoiles (ex : 3.5 / 5)
+// =============================================================================
+
+function StarRating({ rating }: { rating: number }) {
+  const full  = Math.floor(rating);
+  const half  = rating - full >= 0.5;
+  const empty = 5 - full - (half ? 1 : 0);
+
+  return (
+    <div className="flex items-center gap-0.5">
+      {/* Étoiles pleines */}
+      {Array.from({ length: full }).map((_, i) => (
+        <Star key={`f${i}`} className="w-4 h-4 text-orange-400 fill-orange-400" />
+      ))}
+      {/* Demi-étoile — superposition clip 50% */}
+      {half && (
+        <span className="relative inline-block w-4 h-4">
+          <Star className="absolute inset-0 w-4 h-4 text-stone-200 fill-stone-200" />
+          <span className="absolute inset-0 overflow-hidden" style={{ width: "50%" }}>
+            <Star className="w-4 h-4 text-orange-400 fill-orange-400" />
+          </span>
+        </span>
+      )}
+      {/* Étoiles vides */}
+      {Array.from({ length: empty }).map((_, i) => (
+        <Star key={`e${i}`} className="w-4 h-4 text-stone-200 fill-stone-200" />
+      ))}
+      {/* Score numérique discret */}
+      <span className="ml-1.5 text-xs font-semibold text-stone-400">{rating}/5</span>
+    </div>
+  );
+}
+
+// =============================================================================
 // TESTIMONIALS
 // =============================================================================
 
@@ -522,10 +556,8 @@ function Testimonials() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {t.testimonials.items.map((item) => (
             <div key={item.name} className="bg-white border border-stone-100 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-orange-200 transition-all duration-300 flex flex-col">
-              <div className="flex items-center gap-1 mb-3">
-                {Array.from({ length: item.rating }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-orange-400 fill-orange-400" />
-                ))}
+              <div className="mb-3">
+                <StarRating rating={item.rating} />
               </div>
               <p className="text-sm text-stone-600 leading-relaxed mb-6 italic flex-1">&ldquo;{item.text}&rdquo;</p>
               <div className="flex items-center gap-3">
@@ -628,62 +660,6 @@ function Events() {
               </div>
             </div>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// =============================================================================
-// PROMO CODE
-// =============================================================================
-
-function PromoCode() {
-  const { t } = useLang();
-  const [code, setCode]   = useState("");
-  const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
-
-  function handleCheck(e: React.FormEvent) {
-    e.preventDefault();
-    if (!code.trim()) return;
-    setStatus(code.toUpperCase() === "REPIM2026" ? "ok" : "error");
-  }
-
-  return (
-    <section id="promo" className="py-16 bg-gradient-to-r from-orange-500 to-orange-600">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
-          <div className="text-white text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 bg-white/20 text-white text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
-              <Tag className="w-3.5 h-3.5" />{t.promo.badge}
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold mb-3">{t.promo.h2}</h2>
-            <p className="text-orange-100 text-sm leading-relaxed max-w-sm">{t.promo.subtitle}</p>
-          </div>
-          <div className="w-full lg:w-auto lg:min-w-[360px]">
-            <form onSubmit={handleCheck} className="flex gap-2">
-              <div className="flex-1 flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-sm">
-                <Tag className="w-4 h-4 text-stone-400 flex-shrink-0" />
-                <input type="text" value={code}
-                  onChange={(e) => { setCode(e.target.value); setStatus("idle"); }}
-                  placeholder={t.promo.placeholder}
-                  className="flex-1 text-sm text-stone-700 placeholder-stone-400 outline-none bg-transparent uppercase tracking-widest font-semibold" />
-              </div>
-              <button type="submit" className="bg-stone-900 hover:bg-stone-800 text-white text-sm font-bold px-5 py-3 rounded-xl transition-colors whitespace-nowrap">
-                {t.promo.apply}
-              </button>
-            </form>
-            {status === "ok" && (
-              <p className="mt-2 text-sm font-semibold text-white flex items-center gap-2">
-                <CheckCircle className="w-4 h-4" />{t.promo.ok}
-              </p>
-            )}
-            {status === "error" && (
-              <p className="mt-2 text-sm font-semibold text-orange-100 flex items-center gap-2">
-                <X className="w-4 h-4" />{t.promo.err}
-              </p>
-            )}
-          </div>
         </div>
       </div>
     </section>
@@ -1023,7 +999,6 @@ function LandingPageInner() {
       <Testimonials />
       <FAQ />
       <Events />
-      <PromoCode />
       <Pricing />
       <Newsletter />
       <Contact />

@@ -71,10 +71,10 @@ const FR = {
     badge: 'Témoignages', h2: 'Ils ont trouvé avec REPIM',
     subtitle: "Des milliers d'utilisateurs font confiance à REPIM pour leurs projets immobiliers.",
     items: [
-      { name: 'Amina K.',  role: 'Locataire — Abidjan',      avatar: 'AK', rating: 5, text: "REPIM m'a permis de trouver mon appartement en moins de 3 semaines. Le matching automatique m'a envoyé exactement ce que je cherchais sans perdre de temps." },
-      { name: 'Moussa D.', role: 'Investisseur immobilier',   avatar: 'MD', rating: 5, text: "J'ai géré deux transactions depuis la diaspora grâce aux visites virtuelles. La transparence et la sécurité de REPIM m'ont vraiment rassuré." },
-      { name: 'Sophie L.', role: 'Propriétaire vendeur',      avatar: 'SL', rating: 5, text: "J'ai publié mon bien et reçu des demandes qualifiées le lendemain. Le tableau de bord pour gérer mes annonces est vraiment intuitif." },
-      { name: 'Yves K.',   role: 'PRO Agence — Cocody',      avatar: 'YK', rating: 5, text: "En tant qu'agence certifiée REPIM, j'ai triplé mon volume de contacts en 2 mois. La plateforme attire des clients sérieux et bien informés." },
+      { name: 'Amina K.',  role: 'Locataire — Abidjan',      avatar: 'AK', rating: 5,   text: "REPIM m'a permis de trouver mon appartement en moins de 3 semaines. Le matching automatique m'a envoyé exactement ce que je cherchais sans perdre de temps." },
+      { name: 'Moussa D.', role: 'Investisseur immobilier',   avatar: 'MD', rating: 4,   text: "J'ai géré deux transactions depuis la diaspora grâce aux visites virtuelles. La transparence et la sécurité de REPIM m'ont vraiment rassuré." },
+      { name: 'Sophie L.', role: 'Propriétaire vendeur',      avatar: 'SL', rating: 3.5, text: "J'ai publié mon bien et reçu des demandes qualifiées le lendemain. Le tableau de bord pour gérer mes annonces est vraiment intuitif." },
+      { name: 'Yves K.',   role: 'PRO Agence — Cocody',      avatar: 'YK', rating: 4,   text: "En tant qu'agence certifiée REPIM, j'ai triplé mon volume de contacts en 2 mois. La plateforme attire des clients sérieux et bien informés." },
     ],
   },
   pricing: {
@@ -221,10 +221,10 @@ const EN: typeof FR = {
     badge: 'Testimonials', h2: 'They found it on REPIM',
     subtitle: 'Thousands of users trust REPIM for their real estate projects.',
     items: [
-      { name: 'Amina K.',  role: 'Tenant — Abidjan',      avatar: 'AK', rating: 5, text: 'REPIM helped me find my apartment in less than 3 weeks. The smart matching sent me exactly what I was looking for without wasting time.' },
-      { name: 'Moussa D.', role: 'Real estate investor',   avatar: 'MD', rating: 5, text: 'I managed two transactions from the diaspora using virtual tours. The transparency and security of REPIM really reassured me.' },
-      { name: 'Sophie L.', role: 'Property seller',        avatar: 'SL', rating: 5, text: 'I listed my property and received qualified inquiries the next day. The dashboard for managing my listings is truly intuitive.' },
-      { name: 'Yves K.',   role: 'PRO Agency — Cocody',   avatar: 'YK', rating: 5, text: 'As a certified REPIM agency, I tripled my contact volume in 2 months. The platform attracts serious and well-informed clients.' },
+      { name: 'Amina K.',  role: 'Tenant — Abidjan',      avatar: 'AK', rating: 5,   text: 'REPIM helped me find my apartment in less than 3 weeks. The smart matching sent me exactly what I was looking for without wasting time.' },
+      { name: 'Moussa D.', role: 'Real estate investor',   avatar: 'MD', rating: 4,   text: 'I managed two transactions from the diaspora using virtual tours. The transparency and security of REPIM really reassured me.' },
+      { name: 'Sophie L.', role: 'Property seller',        avatar: 'SL', rating: 3.5, text: 'I listed my property and received qualified inquiries the next day. The dashboard for managing my listings is truly intuitive.' },
+      { name: 'Yves K.',   role: 'PRO Agency — Cocody',   avatar: 'YK', rating: 4,   text: 'As a certified REPIM agency, I tripled my contact volume in 2 months. The platform attracts serious and well-informed clients.' },
     ],
   },
   pricing: {
@@ -371,10 +371,10 @@ const AR: typeof FR = {
     badge: 'شهادات', h2: 'وجدوا ضالتهم مع REPIM',
     subtitle: 'آلاف المستخدمين يثقون في REPIM لمشاريعهم العقارية.',
     items: [
-      { name: 'أمينة ك.', role: 'مستأجرة — أبيدجان',   avatar: 'AK', rating: 5, text: 'ساعدتني REPIM في إيجاد شقتي في أقل من 3 أسابيع. أرسل لي نظام المطابقة بالضبط ما كنت أبحث عنه دون إضاعة الوقت.' },
-      { name: 'موسى د.',  role: 'مستثمر عقاري',         avatar: 'MD', rating: 5, text: 'أدرت معاملتين من المهجر بفضل الجولات الافتراضية. الشفافية وأمان REPIM أشعراني بالطمأنينة.' },
-      { name: 'صوفي ل.',  role: 'بائع عقار',             avatar: 'SL', rating: 5, text: 'نشرت عقاري وتلقيت طلبات مؤهلة في اليوم التالي. لوحة التحكم لإدارة إعلاناتي سهلة الاستخدام فعلاً.' },
-      { name: 'إيف ك.',   role: 'وكالة PRO — كوكودي',   avatar: 'YK', rating: 5, text: 'بصفتي وكالة معتمدة من REPIM، ضاعفت حجم تواصلي ثلاث مرات في شهرين. المنصة تجذب عملاء جادين ومطلعين جيداً.' },
+      { name: 'أمينة ك.', role: 'مستأجرة — أبيدجان',   avatar: 'AK', rating: 5,   text: 'ساعدتني REPIM في إيجاد شقتي في أقل من 3 أسابيع. أرسل لي نظام المطابقة بالضبط ما كنت أبحث عنه دون إضاعة الوقت.' },
+      { name: 'موسى د.',  role: 'مستثمر عقاري',         avatar: 'MD', rating: 4,   text: 'أدرت معاملتين من المهجر بفضل الجولات الافتراضية. الشفافية وأمان REPIM أشعراني بالطمأنينة.' },
+      { name: 'صوفي ل.',  role: 'بائع عقار',             avatar: 'SL', rating: 3.5, text: 'نشرت عقاري وتلقيت طلبات مؤهلة في اليوم التالي. لوحة التحكم لإدارة إعلاناتي سهلة الاستخدام فعلاً.' },
+      { name: 'إيف ك.',   role: 'وكالة PRO — كوكودي',   avatar: 'YK', rating: 4,   text: 'بصفتي وكالة معتمدة من REPIM، ضاعفت حجم تواصلي ثلاث مرات في شهرين. المنصة تجذب عملاء جادين ومطلعين جيداً.' },
     ],
   },
   pricing: {
@@ -521,10 +521,10 @@ const CH: typeof FR = {
     badge: '用户评价', h2: '他们在REPIM找到了理想房产',
     subtitle: '数千名用户信任REPIM进行他们的房地产项目。',
     items: [
-      { name: 'Amina K.',  role: '租户 — 阿比让',     avatar: 'AK', rating: 5, text: 'REPIM帮助我在不到3周的时间内找到了我的公寓。智能匹配系统准确地向我发送了我想要的内容，没有浪费时间。' },
-      { name: 'Moussa D.', role: '房地产投资者',       avatar: 'MD', rating: 5, text: '我通过虚拟参观从海外管理了两笔交易。REPIM的透明度和安全性真的让我放心。' },
-      { name: 'Sophie L.', role: '房产卖家',           avatar: 'SL', rating: 5, text: '我发布了我的房产，第二天就收到了合格的询问。管理广告的仪表板真的很直观。' },
-      { name: 'Yves K.',   role: 'PRO机构 — Cocody', avatar: 'YK', rating: 5, text: '作为REPIM认证机构，我在2个月内将联系量增加了三倍。该平台吸引了认真且信息充分的客户。' },
+      { name: 'Amina K.',  role: '租户 — 阿比让',     avatar: 'AK', rating: 5,   text: 'REPIM帮助我在不到3周的时间内找到了我的公寓。智能匹配系统准确地向我发送了我想要的内容，没有浪费时间。' },
+      { name: 'Moussa D.', role: '房地产投资者',       avatar: 'MD', rating: 4,   text: '我通过虚拟参观从海外管理了两笔交易。REPIM的透明度和安全性真的让我放心。' },
+      { name: 'Sophie L.', role: '房产卖家',           avatar: 'SL', rating: 3.5, text: '我发布了我的房产，第二天就收到了合格的询问。管理广告的仪表板真的很直观。' },
+      { name: 'Yves K.',   role: 'PRO机构 — Cocody', avatar: 'YK', rating: 4,   text: '作为REPIM认证机构，我在2个月内将联系量增加了三倍。该平台吸引了认真且信息充分的客户。' },
     ],
   },
   pricing: {
