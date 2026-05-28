@@ -115,6 +115,16 @@ export async function POST(req: NextRequest) {
 
   if (findErr || !partenaire) {
     console.error('[webhook] Partenaire introuvable pour ref:', reference, findErr?.message)
+    // Trace l'événement inconnu pour audit (fire-and-forget, non bloquant)
+    void Promise.resolve(admin.from('transactions').insert({
+      payment_ref:               reference,
+      amount:                    payload.amount ?? payload.data?.amount ?? 0,
+      currency:                  payload.currency ?? 'XOF',
+      status:                    'failed',
+      genius_pay_transaction_id: payload.transaction_id ?? payload.data?.transaction_id ?? null,
+      event_type:                payload.event ?? 'unknown',
+      raw_payload:               payload as unknown as import('@/types/database').Json,
+    }))
     return NextResponse.json({ error: 'Partenaire introuvable.' }, { status: 404 })
   }
 
@@ -142,6 +152,18 @@ export async function POST(req: NextRequest) {
 
   if (updatePartenErr) {
     console.error('[webhook] Erreur MAJ partenaire:', updatePartenErr.message)
+    // Trace l'échec en base pour investigation (fire-and-forget)
+    void Promise.resolve(admin.from('transactions').insert({
+      payment_ref:               reference,
+      partner_id:                partenaire.id,
+      user_id:                   partenaire.user_id,
+      amount:                    payload.amount ?? payload.data?.amount ?? 0,
+      currency:                  payload.currency ?? 'XOF',
+      status:                    'failed',
+      genius_pay_transaction_id: payload.transaction_id ?? payload.data?.transaction_id ?? null,
+      event_type:                payload.event ?? 'payment',
+      raw_payload:               payload as unknown as import('@/types/database').Json,
+    }))
     return NextResponse.json({ error: 'Erreur lors de la mise à jour.' }, { status: 500 })
   }
 
@@ -154,6 +176,24 @@ export async function POST(req: NextRequest) {
   if (updateProErr) {
     // Non bloquant : log seulement (pro_profiles n'existe pas toujours pour les partenaires)
     console.warn('[webhook] Erreur MAJ pro_profiles:', updateProErr.message)
+  }
+
+  // 10. Traçabilité : insertion dans la table transactions
+  const { error: txErr } = await admin.from('transactions').insert({
+    payment_ref:               reference,
+    partner_id:                partenaire.id,
+    user_id:                   partenaire.user_id,
+    amount:                    payload.amount ?? payload.data?.amount ?? 0,
+    currency:                  payload.currency ?? 'XOF',
+    status:                    'success',
+    genius_pay_transaction_id: payload.transaction_id ?? payload.data?.transaction_id ?? null,
+    event_type:                payload.event ?? 'payment.success',
+    raw_payload:               payload as unknown as import('@/types/database').Json,
+  })
+
+  if (txErr) {
+    // Non bloquant — le partenaire est déjà activé, on logue seulement
+    console.warn('[webhook] Erreur insertion transaction:', txErr.message)
   }
 
   console.info(`[webhook] Partenaire ${partenaire.id} activé — plan=${plan} ref=${reference}`)

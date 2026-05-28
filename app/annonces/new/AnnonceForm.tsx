@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { createProperty } from '@/actions/property'
+import { compressImage } from '@/lib/compressImage'
 import {
   Camera, Video, X, PlusCircle, Loader2, Upload,
   DollarSign, MapPin, CheckCircle2, AlertTriangle, Film,
@@ -27,8 +28,9 @@ import {
 const BUCKET        = 'annonces'          // bucket Supabase Storage public
 const MAX_PHOTOS    = 10                  // max 10 photos
 const MAX_VIDEOS    = 2                   // max 2 vidéos
-const MAX_PHOTO_MB  = 5                   // 5 Mo par photo
+const MAX_PHOTO_MB  = 5                   // 5 Mo par photo (avant compression)
 const MAX_VIDEO_MB  = 50                  // 50 Mo par vidéo
+const TARGET_KB     = 500                 // cible compression : 500 Ko par photo
 
 // Formats acceptés
 const PHOTO_ACCEPT  = 'image/jpeg,image/png,image/webp'
@@ -67,9 +69,10 @@ export function AnnonceForm({ userId }: { userId: string }) {
     const slots    = MAX_PHOTOS - photos.length
     const accepted = files.slice(0, slots)
 
+    // Vérification taille brute (la compression réduit ensuite à ~500 Ko)
     const tooBig = accepted.filter(f => f.size > MAX_PHOTO_MB * 1024 * 1024)
     if (tooBig.length) {
-      setError(`${tooBig.length} photo(s) dépassent ${MAX_PHOTO_MB} Mo et ont été ignorées. Compressez-les avant l'envoi.`)
+      setError(`${tooBig.length} photo(s) dépassent ${MAX_PHOTO_MB} Mo. Réduisez-les ou utilisez des photos plus légères.`)
       e.target.value = ''
       return
     }
@@ -135,9 +138,14 @@ export function AnnonceForm({ userId }: { userId: string }) {
 
     let uploaded = 0
 
-    // Upload des photos
+    // Upload des photos (avec compression automatique avant envoi)
     for (let i = 0; i < photos.length; i++) {
-      const { file } = photos[i]
+      const original = photos[i].file
+
+      // ── Compression côté client ────────────────────────────────────────────
+      setUploadInfo(`Compression photo ${i + 1}/${photos.length}…`)
+      const file = await compressImage(original, { targetKB: TARGET_KB })
+
       const ext  = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
       // Chemin : {userId}/photos/{timestamp}-{index}.{ext}
       const path = `${userId}/photos/${Date.now()}-${i}.${ext}`
@@ -427,7 +435,7 @@ export function AnnonceForm({ userId }: { userId: string }) {
           </span>
         </h2>
         <p className="text-xs text-stone-400 mb-4">
-          JPG, PNG, WEBP · Max {MAX_PHOTO_MB} Mo par photo · {MAX_PHOTOS} photos maximum
+          JPG, PNG, WEBP · Max {MAX_PHOTO_MB} Mo par photo · compression automatique → {TARGET_KB} Ko · {MAX_PHOTOS} photos maximum
         </p>
 
         {/* Zone de dépôt */}

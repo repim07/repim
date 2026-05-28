@@ -371,6 +371,51 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          id:                        string
+          payment_ref:               string | null
+          partner_id:                string | null
+          user_id:                   string | null
+          amount:                    number
+          currency:                  string
+          status:                    string
+          genius_pay_transaction_id: string | null
+          payment_method:            string | null
+          event_type:                string | null
+          raw_payload:               Json | null
+          created_at:                string
+        }
+        Insert: {
+          id?:                       string
+          payment_ref?:              string | null
+          partner_id?:               string | null
+          user_id?:                  string | null
+          amount?:                   number
+          currency?:                 string
+          status:                    string
+          genius_pay_transaction_id?: string | null
+          payment_method?:           string | null
+          event_type?:               string | null
+          raw_payload?:              Json | null
+          created_at?:               string
+        }
+        Update: {
+          id?:                       string
+          payment_ref?:              string | null
+          partner_id?:               string | null
+          user_id?:                  string | null
+          amount?:                   number
+          currency?:                 string
+          status?:                   string
+          genius_pay_transaction_id?: string | null
+          payment_method?:           string | null
+          event_type?:               string | null
+          raw_payload?:              Json | null
+          created_at?:               string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

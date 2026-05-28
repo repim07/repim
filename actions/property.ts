@@ -123,6 +123,27 @@ export async function createProperty(
       // Si la ligne n'existe pas (proprietaire sans pro_profile), on laisse en_attente_validation
     }
 
+    // ── 4b. Anti-fraude : limite d'annonces provisoires ───────────────────────
+    // Agences et promoteurs : max 3 annonces provisoires simultanées.
+    // Autres rôles : max 5. Oblige à finaliser le KYC avant de publier davantage.
+    if (propertyStatut === 'en_attente_validation') {
+      const ROLES_STRICTS = ['agence', 'promoteur']
+      const limite = ROLES_STRICTS.includes(profile.role) ? 3 : 5
+
+      const { count } = await supabase
+        .from('properties')
+        .select('id', { count: 'exact', head: true })
+        .eq('owner_id', user.id)
+        .eq('statut', 'en_attente_validation')
+
+      if ((count ?? 0) >= limite) {
+        return {
+          success: false,
+          error: `Limite atteinte : vous avez déjà ${limite} annonce${limite > 1 ? 's' : ''} en cours de vérification. Finalisez votre vérification KYC pour en publier davantage.`,
+        }
+      }
+    }
+
     // ── 5. Insertion en base ──────────────────────────────────────────────────
     const { data, error: insertError } = await supabase
       .from('properties')
