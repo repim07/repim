@@ -26,7 +26,7 @@ const FR = {
     check1: 'Annonces vérifiées', check2: 'Mises en relation sécurisées', check3: 'Disponible sur Android / iOS / Web',
     ctaAndroid: 'Android & iOS', ctaWeb: 'Web App',
     available: 'Disponible sur REPIM · Abidjan',
-    noFraud: 'Zéro tolérance arnaque', quickReport: 'Signalement rapide', userRating: 'Note utilisateurs',
+    noFraud: 'Tolérance zéro arnaque', quickReport: 'Signalement rapide', userRating: 'Note utilisateurs',
     stats: [
       { value: '100%',   label: 'Annonces vérifiées par notre équipe' },
       { value: '2 500+', label: 'Agents & agences certifiés' },
@@ -41,9 +41,7 @@ const FR = {
       { label: 'Terrains',                description: 'Particulier, communautaire, bail, agences' },
       { label: 'Villas & Appartements',   description: 'Vente ou location, toutes gammes' },
       { label: "Opportunités d'Affaires", description: 'Décapage, bornage, viabilisation, lotissement' },
-      { label: 'Gestions Immobilières',   description: 'Suivi complet de vos biens' },
       { label: 'Rénovations',             description: 'Mise en relation avec les professionnels' },
-      { label: 'Architecture & Déco',     description: "Architectes, décorateurs, design d'intérieur" },
     ],
   },
   features: {
@@ -89,7 +87,7 @@ const FR = {
     ],
   },
   faq: {
-    badge: 'Questions fréquentes', h2: 'Foire aux Questions',
+    badge: 'Questions fréquentes', h2: 'FAQ',
     subtitle: 'Tout ce que vous devez savoir sur REPIM.',
     noAnswer: 'Vous ne trouvez pas votre réponse ?', contactTeam: 'Contactez notre équipe',
     items: [
@@ -110,7 +108,7 @@ const FR = {
     register: "S'inscrire",
     items: [
       { date: '15 Juin 2026',   type: 'Webinaire', typeCls: 'bg-blue-100 text-blue-700',    title: "Investir dans l'immobilier ivoirien depuis la diaspora",  desc: "Conseils pratiques, financement, pièges à éviter — avec un expert REPIM et un notaire invité.", seats: 'Places limitées',      link: '#' },
-      { date: '28 Juin 2026',   type: 'Salon',     typeCls: 'bg-green-100 text-green-700',   title: 'Salon REPIM Abidjan 2026 — Édition Spéciale',             desc: 'Rencontrez plus de 50 agences et promoteurs certifiés en un seul lieu. Entrée gratuite sur inscription.', seats: 'Inscription gratuite', link: '#' },
+      { date: '28 Juin 2026',   type: 'Salon',     typeCls: 'bg-green-100 text-green-700',   title: 'Salon de l\'immobilier Abidjan 2026',             desc: 'Rencontrez plus de 50 agences et promoteurs certifiés en un seul lieu. Entrée gratuite sur inscription.', seats: 'Inscription gratuite', link: '#' },
       { date: '10 Juil. 2026',  type: 'Atelier',   typeCls: 'bg-orange-100 text-orange-700', title: 'Comprendre le dossier KYC : guide pas à pas',             desc: "Session pratique pour les nouveaux professionnels : comment préparer et déposer votre dossier en 30 minutes.", seats: '20 participants max', link: '#' },
     ],
   },
@@ -193,9 +191,7 @@ const EN: typeof FR = {
       { label: 'Land',                   description: 'Private, community, lease, agencies' },
       { label: 'Villas & Apartments',    description: 'For sale or rent, all ranges' },
       { label: 'Business Opportunities', description: 'Clearing, surveying, land development' },
-      { label: 'Property Management',    description: 'Complete management of your properties' },
       { label: 'Renovations',            description: 'Connect with qualified professionals' },
-      { label: 'Architecture & Decor',   description: 'Architects, decorators, interior design' },
     ],
   },
   features: {
@@ -261,7 +257,7 @@ const EN: typeof FR = {
     register: 'Register',
     items: [
       { date: 'June 15, 2026',  type: 'Webinar',    typeCls: 'bg-blue-100 text-blue-700',   title: 'Investing in Ivorian real estate from the diaspora',  desc: 'Practical advice, financing, pitfalls — with a REPIM expert and a guest notary.', seats: 'Limited seats',       link: '#' },
-      { date: 'June 28, 2026',  type: 'Trade Show', typeCls: 'bg-green-100 text-green-700',  title: 'REPIM Abidjan Fair 2026 — Special Edition',           desc: 'Meet over 50 certified agencies and developers in one place. Free entry with registration.', seats: 'Free registration', link: '#' },
+      { date: 'June 28, 2026',  type: 'Trade Show', typeCls: 'bg-green-100 text-green-700',  title: 'Salon de l\'immobilier Abidjan 2026',           desc: 'Meet over 50 certified agencies and developers in one place. Free entry with registration.', seats: 'Free registration', link: '#' },
       { date: 'Jul. 10, 2026',  type: 'Workshop',   typeCls: 'bg-orange-100 text-orange-700', title: 'Understanding KYC documents: step-by-step guide',   desc: 'Practical session for new professionals: how to prepare and submit your file in 30 minutes.', seats: '20 participants max', link: '#' },
     ],
   },
@@ -344,9 +340,7 @@ const AR: typeof FR = {
       { label: 'أراضي',        description: 'خاصة، مجتمعية، إيجار، وكالات' },
       { label: 'فيلات وشقق',   description: 'للبيع أو الإيجار، بجميع الفئات' },
       { label: 'فرص أعمال',    description: 'تسوية، مساحة، تطوير أراضي' },
-      { label: 'إدارة عقارية', description: 'إدارة كاملة لعقاراتك' },
       { label: 'ترميم',        description: 'تواصل مع المتخصصين المؤهلين' },
-      { label: 'هندسة وديكور', description: 'مهندسون، مصممون، تصميم داخلي' },
     ],
   },
   features: {
@@ -412,7 +406,7 @@ const AR: typeof FR = {
     register: 'التسجيل',
     items: [
       { date: '15 يونيو 2026',  type: 'ندوة',  typeCls: 'bg-blue-100 text-blue-700',   title: 'الاستثمار في العقارات الإيفوارية من المهجر',   desc: 'نصائح عملية، تمويل، مخاطر يجب تجنبها — مع خبير REPIM وكاتب عدل ضيف.', seats: 'مقاعد محدودة',    link: '#' },
-      { date: '28 يونيو 2026',  type: 'معرض',  typeCls: 'bg-green-100 text-green-700',  title: 'معرض REPIM أبيدجان 2026 — الطبعة الخاصة',     desc: 'لتقِ أكثر من 50 وكالة ومطور معتمد في مكان واحد. الدخول مجاني بالتسجيل.', seats: 'تسجيل مجاني',  link: '#' },
+      { date: '28 يونيو 2026',  type: 'معرض',  typeCls: 'bg-green-100 text-green-700',  title: 'Salon de l\'immobilier Abidjan 2026',     desc: 'لتقِ أكثر من 50 وكالة ومطور معتمد في مكان واحد. الدخول مجاني بالتسجيل.', seats: 'تسجيل مجاني',  link: '#' },
       { date: '10 يوليو 2026',  type: 'ورشة',  typeCls: 'bg-orange-100 text-orange-700', title: 'فهم ملف KYC: دليل خطوة بخطوة',               desc: 'جلسة عملية للمحترفين الجدد: كيفية إعداد وتقديم ملفك في 30 دقيقة.', seats: '20 مشارك كحد أقصى', link: '#' },
     ],
   },
@@ -495,9 +489,7 @@ const CH: typeof FR = {
       { label: '土地',       description: '私人、社区、租赁、机构' },
       { label: '别墅和公寓', description: '出售或租赁，各种档次' },
       { label: '商业机会',   description: '场地清理、勘测、土地开发' },
-      { label: '物业管理',   description: '全面管理您的房产' },
       { label: '装修',       description: '与合格专业人士联系' },
-      { label: '建筑与装饰', description: '建筑师、装饰师、室内设计' },
     ],
   },
   features: {
@@ -563,7 +555,7 @@ const CH: typeof FR = {
     register: '注册',
     items: [
       { date: '2026年6月15日',  type: '网络研讨会', typeCls: 'bg-blue-100 text-blue-700',   title: '从海外投资象牙海岸房地产',  desc: '实用建议、融资、注意事项——与REPIM专家和受邀公证人共同探讨。', seats: '名额有限',        link: '#' },
-      { date: '2026年6月28日',  type: '展会',       typeCls: 'bg-green-100 text-green-700',  title: 'REPIM阿比让2026展会——特别版', desc: '在一个地方遇见50多家认证机构和开发商。注册免费入场。', seats: '免费注册',        link: '#' },
+      { date: '2026年6月28日',  type: '展会',       typeCls: 'bg-green-100 text-green-700',  title: 'Salon de l\'immobilier Abidjan 2026', desc: '在一个地方遇见50多家认证机构和开发商。注册免费入场。', seats: '免费注册',        link: '#' },
       { date: '2026年7月10日',  type: '工作坊',     typeCls: 'bg-orange-100 text-orange-700', title: '了解KYC文件：一步一步指南', desc: '针对新专业人士的实践课程：如何在30分钟内准备和提交您的文件。', seats: '最多20名参与者', link: '#' },
     ],
   },

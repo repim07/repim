@@ -11,8 +11,8 @@ import {
   MapPin, ChevronRight, ChevronDown, Menu, X,
   Key, Heart, Phone, Mail, Globe, Share2, Link2,
   Handshake, Smartphone, Video, MessageSquare,
-  Zap, Home, TreePine, Building, Briefcase,
-  Wrench, BadgeCheck, Tag, Calendar, Send,
+  Zap, Home, TreePine, Briefcase,
+  Wrench, Tag, Calendar, Send,
   User, Plus, Minus, ExternalLink,
 } from "lucide-react";
 
@@ -52,7 +52,7 @@ const PARTNER_LABELS = [
   "Autre professionnel",
 ];
 
-const PROPERTY_ICONS = [TreePine, Home, Briefcase, Building, Wrench, BadgeCheck];
+const PROPERTY_ICONS = [TreePine, Home, Briefcase, Wrench];
 const FEATURE_ICONS  = [Zap, Video, MessageSquare, Bell];
 const STEP_ICONS     = [Search, Video, Handshake];
 
@@ -406,10 +406,10 @@ function PropertyTypes() {
           <span className="text-orange-400 text-sm font-semibold uppercase tracking-widest">{t.propertyTypes.badge}</span>
           <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-white">{t.propertyTypes.h2}</h2>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {t.propertyTypes.items.map((type, i) => {
             const Icon = PROPERTY_ICONS[i];
-            const slugs = ["terrains", "villas", "affaires", "gestions", "renovations", "architecture"];
+            const slugs = ["terrains", "villas", "affaires", "renovations"];
             return (
               <a key={type.label} href={`/annonces?categorie=${slugs[i]}`}
                 className="group flex flex-col items-center text-center bg-orange-900/50 hover:bg-orange-500 border border-orange-800 hover:border-orange-400 rounded-2xl p-4 transition-all duration-300 cursor-pointer">
@@ -769,11 +769,12 @@ function Newsletter() {
 }
 
 // =============================================================================
-// CONTACT
+// FLOATING CONTACT
 // =============================================================================
 
-function Contact() {
+function FloatingContact() {
   const { t } = useLang();
+  const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ nom: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
   const [isPending, start] = useTransition();
@@ -787,94 +788,92 @@ function Contact() {
     start(async () => { await new Promise((r) => setTimeout(r, 900)); setSent(true); });
   }
 
-  return (
-    <section id="contact" className="py-20 lg:py-28 bg-stone-50">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+  function toggleOpen() {
+    setOpen((v) => !v);
+  }
 
-          <div>
-            <span className="text-orange-500 text-sm font-semibold uppercase tracking-widest">{t.contact.badge}</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-stone-900 mb-5">{t.contact.h2}</h2>
-            <p className="text-stone-500 text-base leading-relaxed mb-8">{t.contact.subtitle}</p>
-            <div className="space-y-5">
-              <a href="tel:+2250101042776" className="flex items-center gap-4 group">
-                <div className="w-11 h-11 bg-orange-100 group-hover:bg-orange-500 rounded-xl flex items-center justify-center transition-colors">
-                  <Phone className="w-5 h-5 text-orange-500 group-hover:text-white transition-colors" />
-                </div>
-                <div>
-                  <p className="text-xs text-stone-400 font-medium">{t.contact.phoneLabel}</p>
-                  <p className="text-sm font-semibold text-stone-800 group-hover:text-orange-600 transition-colors">(+225) 01 01 042 776</p>
-                  <p className="text-sm text-stone-500">07 04 111 53</p>
-                </div>
-              </a>
-              <a href="mailto:repim.ci1986@gmail.com" className="flex items-center gap-4 group">
-                <div className="w-11 h-11 bg-orange-100 group-hover:bg-orange-500 rounded-xl flex items-center justify-center transition-colors">
-                  <Mail className="w-5 h-5 text-orange-500 group-hover:text-white transition-colors" />
-                </div>
-                <div>
-                  <p className="text-xs text-stone-400 font-medium">{t.contact.emailLabel}</p>
-                  <p className="text-sm font-semibold text-stone-800 group-hover:text-orange-600 transition-colors">repim.ci1986@gmail.com</p>
-                </div>
-              </a>
-              <div className="flex items-center gap-4">
-                <div className="w-11 h-11 bg-orange-100 rounded-xl flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-orange-500" />
-                </div>
-                <div>
-                  <p className="text-xs text-stone-400 font-medium">{t.contact.addressLabel}</p>
-                  <p className="text-sm font-semibold text-stone-800">{t.contact.address}</p>
-                  <p className="text-xs text-stone-500">{t.contact.worldwide}</p>
-                </div>
-              </div>
+  return (
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+      {open && (
+        <div className="w-80 bg-white rounded-2xl shadow-2xl border border-stone-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 bg-orange-500">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="w-4 h-4 text-white" />
+              <span className="text-sm font-bold text-white">{t.contact.h2}</span>
             </div>
+            <button onClick={() => setOpen(false)} className="text-white/80 hover:text-white transition-colors" aria-label="Fermer">
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
-          <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-6 sm:p-8">
+          {/* Coordonnées */}
+          <div className="px-4 py-3 bg-orange-50 border-b border-orange-100 flex flex-col gap-2">
+            <a href="tel:+2250101042776" className="flex items-center gap-2 text-xs text-stone-600 hover:text-orange-600 transition-colors">
+              <Phone className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+              <span>(+225) 01 01 042 776</span>
+            </a>
+            <a href="tel:+2250704111753" className="flex items-center gap-2 text-xs text-stone-600 hover:text-orange-600 transition-colors">
+              <Phone className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+              <span>(+225) 07 04 111 753</span>
+            </a>
+            <a href="mailto:repim.ci1986@gmail.com" className="flex items-center gap-2 text-xs text-stone-600 hover:text-orange-600 transition-colors">
+              <Mail className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+              <span>repim.ci1986@gmail.com</span>
+            </a>
+          </div>
+
+          {/* Formulaire */}
+          <div className="p-4">
             {sent ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-8 h-8 text-green-500" />
+              <div className="text-center py-6">
+                <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <CheckCircle className="w-6 h-6 text-green-500" />
                 </div>
-                <h3 className="text-lg font-bold text-stone-900 mb-2">{t.contact.sent}</h3>
-                <p className="text-sm text-stone-500">{t.contact.sentSub}</p>
+                <p className="text-sm font-bold text-stone-900">{t.contact.sent}</p>
+                <p className="text-xs text-stone-500 mt-1">{t.contact.sentSub}</p>
                 <button onClick={() => { setSent(false); setForm({ nom: "", email: "", message: "" }); }}
-                  className="mt-5 text-sm text-orange-500 hover:text-orange-600 font-semibold transition-colors">
+                  className="mt-3 text-xs text-orange-500 hover:text-orange-600 font-semibold transition-colors">
                   {t.contact.again}
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {([ { key: "nom", label: t.contact.name, type: "text", ph: t.contact.namePh, Icon: User }, { key: "email", label: t.contact.email, type: "email", ph: t.contact.emailPh, Icon: Mail } ] as { key: "nom"|"email"; label: string; type: string; ph: string; Icon: React.ElementType }[]).map(({ key, label, type, ph, Icon }) => (
-                  <div key={key}>
-                    <label className="block text-sm font-semibold text-stone-700 mb-1.5">{label} <span className="text-orange-500">*</span></label>
-                    <div className="flex items-center gap-3 border border-stone-200 rounded-xl px-4 py-3 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
-                      <Icon className="w-4 h-4 text-stone-400 flex-shrink-0" />
-                      <input name={key} type={type} required value={form[key]} onChange={handleChange}
-                        placeholder={ph}
-                        className="flex-1 text-sm text-stone-700 placeholder-stone-400 outline-none bg-transparent" />
-                    </div>
-                  </div>
-                ))}
-                <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-1.5">{t.contact.message} <span className="text-orange-500">*</span></label>
-                  <textarea name="message" required value={form.message} onChange={handleChange}
-                    rows={5} placeholder={t.contact.messagePh}
-                    className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-700 placeholder-stone-400 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all resize-none" />
-                </div>
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <input name="nom" type="text" required value={form.nom} onChange={handleChange}
+                  placeholder={t.contact.namePh}
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm text-stone-700 placeholder-stone-400 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
+                <input name="email" type="email" required value={form.email} onChange={handleChange}
+                  placeholder={t.contact.emailPh}
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm text-stone-700 placeholder-stone-400 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
+                <textarea name="message" required value={form.message} onChange={handleChange}
+                  rows={3} placeholder={t.contact.messagePh}
+                  className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm text-stone-700 placeholder-stone-400 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all resize-none" />
                 <button type="submit" disabled={isPending}
-                  className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-bold py-3 rounded-xl transition-colors text-sm">
+                  className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-bold py-2.5 rounded-lg transition-colors text-sm">
                   {isPending ? (
                     <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />{t.contact.sending}</>
                   ) : (
-                    <><MessageSquare className="w-4 h-4" />{t.contact.send}</>
+                    <><Send className="w-3.5 h-3.5" />{t.contact.send}</>
                   )}
                 </button>
               </form>
             )}
           </div>
         </div>
-      </div>
-    </section>
+      )}
+
+      {/* Bouton FAB */}
+      <button
+        onClick={toggleOpen}
+        className={`w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 ${open ? "bg-stone-700 hover:bg-stone-600" : "bg-orange-500 hover:bg-orange-600 hover:scale-110"}`}
+        aria-label="Contacter REPIM"
+      >
+        {open
+          ? <X className="w-6 h-6 text-white" />
+          : <MessageSquare className="w-6 h-6 text-white" />
+        }
+      </button>
+    </div>
   );
 }
 
@@ -963,7 +962,7 @@ function Footer() {
               <Phone className="w-4 h-4" />(+225) 01 01 042 776
             </a>
             <a href="tel:+2250704111753" className="flex items-center gap-2 hover:text-orange-400 transition-colors">
-              <Phone className="w-4 h-4" />07 04 111 53
+              <Phone className="w-4 h-4" />(+225) 07 04 111 753
             </a>
             <a href="mailto:repim.ci1986@gmail.com" className="flex items-center gap-2 hover:text-orange-400 transition-colors">
               <Mail className="w-4 h-4" />repim.ci1986@gmail.com
@@ -1001,9 +1000,10 @@ function LandingPageInner() {
       <Events />
       <Pricing />
       <Newsletter />
-      <Contact />
+      <div id="contact" />
       <FinalCTA />
       <Footer />
+      <FloatingContact />
     </main>
   );
 }
